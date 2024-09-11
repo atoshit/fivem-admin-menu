@@ -19,6 +19,7 @@ local menu_admin_self = zUI.CreateSubMenu(menu_admin, "", "Options Personnel")
 local menu_admin_vehicle = zUI.CreateSubMenu(menu_admin, "", "Gestion des véhicules")
 local menu_admin_players = zUI.CreateSubMenu(menu_admin, "", "Liste des joueurs")
 local menu_admin_player = zUI.CreateSubMenu(menu_admin_players, "", "Gestion du joueur")
+local menu_admin_player_troll = zUI.CreateSubMenu(menu_admin_player, "", "Troll")
 
 
 --- Ajouter un bouton de joueur pour les joueurs normaux.
@@ -123,22 +124,41 @@ menu_admin_players:SetItems(function(Items)
     local playersToShow = #adminMenu.filteredPlayersList > 0 and adminMenu.filteredPlayersList or adminMenu.playersList
 
     for _, playerData in ipairs(playersToShow) do
-        if tonumber(playerData.id) == tonumber(GetPlayerServerId(PlayerId())) then
-            AddAlertButton(Items, playerData, "LOCK_ICON", "Vous ne pouvez pas intéragir sur vous même")
-        elseif playerData.group ~= 'user' then
-            AddAlertButton(Items, playerData, "HOST_CROWN", "Vous ne pouvez pas intéragir sur un autre administrateur.")
-        else
+        --if tonumber(playerData.id) == tonumber(GetPlayerServerId(PlayerId())) then
+        --    AddAlertButton(Items, playerData, "LOCK_ICON", "Vous ne pouvez pas intéragir sur vous même")
+        --elseif playerData.group ~= 'user' then
+        --    AddAlertButton(Items, playerData, "HOST_CROWN", "Vous ne pouvez pas intéragir sur un autre administrateur.")
+        --else
             AddPlayerButton(Items, playerData, "TICK_ICON", menu_admin_player)
-        end
+        --end
     end
 end)
 
 menu_admin_player:SetItems(function(Items)
     if adminMenu.selectedPlayer then
-        Items:AddSeparator(adminMenu.selectedPlayer.rpname)
-        Items:AddButton("Ply Ped", "", { HoverColor = "#f16625" }, function(onSelected, onHovered)
+        Items:AddSeparator("[" .. adminMenu.selectedPlayer.id .. "] " .. adminMenu.selectedPlayer.rpname)
+
+        Items:AddLine({ "#f16625" })
+
+        Items:AddButton("Troll", "", { RightLabel = '→', HoverColor = "#f16625" }, nil, menu_admin_player_troll)
+    end
+end)
+
+menu_admin_player_troll:SetItems(function(Items)
+    if adminMenu.selectedPlayer then
+        Items:AddSeparator("[" .. adminMenu.selectedPlayer.id .. "] " .. adminMenu.selectedPlayer.rpname)
+
+        Items:AddLine({ "#f16625" })
+
+        Items:AddButton("Freeze", '', { HoverColor = "#f16625" }, function(onSelected, onHovered)
             if onSelected then
-                print(adminMenu.selectedPlayer.ped)
+                FreezeEntityPosition(adminMenu.selectedPlayer.ped, true)
+            end
+        end)
+
+        Items:AddButton("Unfreeze", '', { HoverColor = "#f16625" }, function(onSelected, onHovered)
+            if onSelected then
+                FreezeEntityPosition(adminMenu.selectedPlayer.ped, false)
             end
         end)
     end
