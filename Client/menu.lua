@@ -88,9 +88,8 @@ menu_admin_self:SetItems(function(Items)
     if not adminMenu.pedMode then
         Items:AddButton("Ped", "Changer son ped", { HoverColor = "#f16625" }, function(onSelected, onHovered)
             if onSelected then
-                zUI.Input("Skin", "Entrez le modèle du skin", function(model)
-                    adminMenu:ChangePedModel(model)
-                end)
+                local model = zUI.KeyboardInput("Ped", nil, "Exemple: a_f_m_salton_01", 30)
+                adminMenu:ChangePedModel(model)
             end
         end)
     else
@@ -121,7 +120,6 @@ menu_admin_players:SetItems(function(Items)
     local playersToShow = #adminMenu.filteredPlayersList > 0 and adminMenu.filteredPlayersList or adminMenu.playersList
 
     for _, playerData in ipairs(playersToShow) do
-        local badge, message
         if tonumber(playerData.id) == tonumber(GetPlayerServerId(PlayerId())) then
             AddAlertButton(Items, playerData, "LOCK_ICON", "Vous ne pouvez pas intéragir sur vous même")
         elseif playerData.group ~= 'user' then

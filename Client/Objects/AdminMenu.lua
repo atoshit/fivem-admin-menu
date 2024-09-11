@@ -25,6 +25,10 @@ function AdminMenu:new()
     self.infiniteStamina = false
     self.pedMode = false
     self.pedModel = nil
+    self.playersList = {}
+    self.filteredPlayersList = {}  
+    self.searchInput = ""
+    self.selectedPlayer = nil
     self.currentEntity = PlayerPedId()
     self.currentPlayerId = PlayerId()
     self.noclipActive = false
