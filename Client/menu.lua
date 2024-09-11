@@ -136,6 +136,11 @@ end)
 menu_admin_player:SetItems(function(Items)
     if adminMenu.selectedPlayer then
         Items:AddSeparator(adminMenu.selectedPlayer.rpname)
+        Items:AddButton("Ply Ped", "", { HoverColor = "#f16625" }, function(onSelected, onHovered)
+            if onSelected then
+                print(adminMenu.selectedPlayer.ped)
+            end
+        end)
     end
 end)
 

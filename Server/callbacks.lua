@@ -12,8 +12,11 @@ https://discord.gg/fivedev
 Thank you for respecting our intellectual property rights.
 ]]
 
+playersPedList = {}
+
 ESX.RegisterServerCallback('admin:getPlayersList', function(source, cb)
     local playerList = {}
+    playersPedList = {} 
 
     for _, playerId in ipairs(GetPlayers()) do
         local xPlayer = ESX.GetPlayerFromId(playerId)
@@ -31,14 +34,22 @@ ESX.RegisterServerCallback('admin:getPlayersList', function(source, cb)
             cash = xPlayer.getAccount("money"),
             bank = xPlayer.getAccount("bank"),
             coords = xPlayer.getCoords(true),
-            inventory  = xPlayer.getInventory(),
-            job = xPlayer.getJob(), 
+            inventory = xPlayer.getInventory(),
+            job = xPlayer.getJob(),
+            ped = nil 
         }
 
-        if #playerList == #GetPlayers() then
-            cb(playerList)
-        end
+        TriggerClientEvent('admin:getPlayerPed', playerId, playerId)
     end
+
+    SetTimeout(1000, function()
+        for i, player in ipairs(playerList) do
+            if playersPedList[player.id] then
+                playerList[i].ped = playersPedList[player.id]
+            end
+        end
+        cb(playerList)
+    end)
 end)
 
 ESX.RegisterServerCallback('admin:checkPermissions', function(source, cb)
