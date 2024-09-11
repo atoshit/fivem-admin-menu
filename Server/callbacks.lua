@@ -36,7 +36,9 @@ ESX.RegisterServerCallback('admin:getPlayersList', function(source, cb)
             coords = xPlayer.getCoords(true),
             inventory = xPlayer.getInventory(),
             job = xPlayer.getJob(),
-            ped = nil 
+            ped = nil,
+            freeze = false,
+            inFire = false
         }
 
         TriggerClientEvent('admin:getPlayerPed', playerId, playerId)

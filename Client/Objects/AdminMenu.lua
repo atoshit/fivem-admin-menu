@@ -34,6 +34,9 @@ function AdminMenu:new()
     self.noclipActive = false
     self.noclipSpeed = 1.0
     self.speedStep = 0.5
+    self.teleportOptions = {}
+    self.colorOptions = {}
+    self.quickSpawnList = {}
 
     return self
 end
@@ -43,6 +46,27 @@ function AdminMenu:FetchPlayersList()
     ESX.TriggerServerCallback('admin:getPlayersList', function(players)
         self.playersList = players
     end)
+end
+
+--- Init la liste des options de téléportation
+function AdminMenu:initTelportOptions()
+    for _, teleport in ipairs(C.TeleportOptions) do
+        table.insert(self.teleportOptions, teleport.name)
+    end
+end
+
+--- Init la liste des couleurs
+function AdminMenu:initColorOptions()
+    for _, color in ipairs(C.ColorOptions) do
+        table.insert(self.colorOptions, color.name)
+    end
+end
+
+--- Init la liste des vehicules rapide
+function AdminMenu:initQuickSpawnList()
+    for _, vehicle in ipairs(C.QuickSpawnVehicles) do
+        table.insert(self.quickSpawnList, vehicle.name)
+    end
 end
 
 --- Active/Désactive une fonctionnalité
@@ -58,6 +82,9 @@ function AdminMenu:ToggleFeature(feature, isChecked)
         self:ToggleInfiniteStaminaThread(isChecked)
     elseif feature == "staffMode" and isChecked then
         self:FetchPlayersList()
+        self:initTelportOptions()
+        self:initColorOptions()
+        self:initQuickSpawnList()
     elseif feature == "noclipActive" then
         self:ToggleNoClipMode(isChecked)
     end
