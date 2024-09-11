@@ -207,3 +207,22 @@ function AdminMenu:ToggleNoClipMode(enable)
         end
     end)
 end
+
+--- Faire apparaitre un véhicuke à une position
+---@param modelName string : Modèle du véhicule
+---@param coords vector3 : Coordonnées du véhicule
+---@param heading heading : Sens de l'apparition du véhicule
+function AdminMenu:SpawnVehicle(modelName, coords, heading)
+    if modelName and modelName ~= "" then
+        local modelHash = GetHashKey(modelName)
+
+        if IsModelInCdimage(modelHash) and IsModelValid(modelHash) then
+            RequestModel(modelHash)
+            repeat Wait(500) until HasModelLoaded(modelHash)
+
+            CreateVehicle(modelHash, coords.x, coords.y, coords.z, heading, true, false)
+        else
+            zUI.AlertInput("Avertissement !", nil, "Le véhicule est invalide !")
+        end
+    end
+end

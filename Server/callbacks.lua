@@ -25,7 +25,7 @@ ESX.RegisterServerCallback('admin:getPlayersList', function(source, cb)
             id = playerId,
             discord_id = discord_id,
             rpname = xPlayer.getName(),
-            name = namen,
+            name = name,
             identifier = identifier,
             group = xPlayer.getGroup(),
             cash = xPlayer.getAccount("money"),

@@ -16,8 +16,10 @@ adminMenu = AdminMenu:new()
 
 menu_admin = zUI.CreateMenu("", "Menu Administration", nil, nil, C.MenuBanner)
 local menu_admin_self = zUI.CreateSubMenu(menu_admin, "", "Options Personnel")
+local menu_admin_vehicle = zUI.CreateSubMenu(menu_admin, "", "Gestion des véhicules")
 local menu_admin_players = zUI.CreateSubMenu(menu_admin, "", "Liste des joueurs")
 local menu_admin_player = zUI.CreateSubMenu(menu_admin_players, "", "Gestion du joueur")
+
 
 --- Ajouter un bouton de joueur pour les joueurs normaux.
 --- @param Items table : La table des éléments du menu.
@@ -54,6 +56,7 @@ menu_admin:SetItems(function(Items)
         Items:AddLine({ "#f16625" })
         Items:AddButton("Options Personnel", "", { RightLabel = '→', LeftBadge = "NEW_STAR", HoverColor = "#f16625" }, nil, menu_admin_self)
         Items:AddButton("Liste des joueurs", "", { RightLabel = '→', LeftBadge = "NEW_STAR", HoverColor = "#f16625" }, nil, menu_admin_players)
+        Items:AddButton("Gestion des véhicules", "", { RightLabel = '→', LeftBadge = "NEW_STAR", HoverColor = "#f16625" }, nil, menu_admin_vehicle)
     end
 end)
 
@@ -133,5 +136,111 @@ end)
 menu_admin_player:SetItems(function(Items)
     if adminMenu.selectedPlayer then
         Items:AddSeparator(adminMenu.selectedPlayer.rpname)
+    end
+end)
+
+menu_admin_vehicle:SetItems(function(Items)
+    Items:AddButton("Spawn un véhicule", "", { HoverColor = "#f16625" }, function(onSelected, onHovered)
+        if onSelected then
+            if IsPedInAnyVehicle(adminMenu.currentEntity, false) then
+                zUI.AlertInput("Avertissement !", nil, "Vous êtes déjà dans un véhicule.")
+                return
+            end
+
+            local model = zUI.KeyboardInput("Modèle du véhicule", nil, "Exemple: sou_300dem", 30)
+            local spawnCoords = GetEntityCoords(adminMenu.currentEntity)
+            local spawnHeading = GetEntityHeading(adminMenu.currentEntity)
+            adminMenu:SpawnVehicle(model, spawnCoords, spawnHeading)
+        end
+    end)
+
+    Items:AddList("Spawn Rapide", "", {"Blista", "BMX", "Sanchez"}, {}, function (onSelected, onHovered, onListChange, index)
+        if onSelected then
+            if IsPedInAnyVehicle(adminMenu.currentEntity, false) then
+                zUI.AlertInput("Avertissement !", nil, "Vous êtes déjà dans un véhicule.")
+                return
+            end
+
+            local spawnCoords = GetEntityCoords(adminMenu.currentEntity)
+            local spawnHeading = GetEntityHeading(adminMenu.currentEntity)
+
+            if index == 1 then
+                adminMenu:SpawnVehicle("blista", spawnCoords, spawnHeading)
+            elseif index == 2 then
+                adminMenu:SpawnVehicle("bmx", spawnCoords, spawnHeading)
+            else
+                adminMenu:SpawnVehicle("sanchez", spawnCoords, spawnHeading)
+            end
+        end
+    end)
+
+    Items:AddButton("Supprimer un véhicule", "", { HoverColor = "#f16625" }, function(onSelected, onHovered)
+        if onSelected then
+            if not IsPedInAnyVehicle(adminMenu.currentEntity, false) then
+                zUI.AlertInput("Avertissement !", nil, "Vous êtes pas dans un véhicule.")
+                return
+            end
+
+            local vehicle = GetVehiclePedIsIn(adminMenu.currentEntity, false)
+            DeleteEntity(vehicle)
+        end
+    end)
+
+    if IsPedInAnyVehicle(adminMenu.currentEntity, false) then
+        local currentVehicle = GetVehiclePedIsIn(adminMenu.currentEntity, false)
+
+        Items:AddLine({ "#f16625" })
+
+        Items:AddButton("Réparer le véhicule", "", { HoverColor = "#f16625" }, function(onSelected, onHovered)
+            if onSelected then
+                SetVehicleFixed(currentVehicle)
+                SetVehicleDeformationFixed(currentVehicle)
+            end
+        end)
+
+        Items:AddButton("Mettre le plein", "", { HoverColor = "#f16625" }, function(onSelected, onHovered)
+            if onSelected then
+                SetVehicleFuelLevel(currentVehicle, 100.0)
+            end
+        end)
+
+        Items:AddList("Changer la couleur", "", {"Rouge", "Orange", "Vert", "Noir", "Blanc", "Violet", "Jaune", "Marron", "Rose", "Bleu", "Bleu Clair"}, {}, function (onSelected, onHovered, onListChange, index)
+            if onSelected then
+                if index == 1 then
+                    SetVehicleCustomPrimaryColour(currentVehicle, 255, 0, 0)
+                    SetVehicleCustomSecondaryColour(currentVehicle, 255, 0, 0)
+                elseif index == 2 then
+                    SetVehicleCustomPrimaryColour(currentVehicle, 255, 115, 0)
+                    SetVehicleCustomSecondaryColour(currentVehicle, 255, 115, 0)
+                elseif index == 3 then
+                    SetVehicleCustomPrimaryColour(currentVehicle, 60, 179, 113)
+                    SetVehicleCustomSecondaryColour(currentVehicle, 60, 179, 113)
+                elseif index == 4 then
+                    SetVehicleCustomPrimaryColour(currentVehicle, 0, 0, 0)
+                    SetVehicleCustomSecondaryColour(currentVehicle, 0, 0, 0)
+                elseif index == 5 then
+                    SetVehicleCustomPrimaryColour(currentVehicle, 255, 255, 255)
+                    SetVehicleCustomSecondaryColour(currentVehicle, 255, 255, 255)
+                elseif index == 6 then
+                    SetVehicleCustomPrimaryColour(currentVehicle, 82, 61, 255)
+                    SetVehicleCustomSecondaryColour(currentVehicle, 82, 61, 255)
+                elseif index == 7 then
+                    SetVehicleCustomPrimaryColour(currentVehicle, 255, 215, 0)
+                    SetVehicleCustomSecondaryColour(currentVehicle, 255, 215, 0)
+                elseif index == 8 then
+                    SetVehicleCustomPrimaryColour(currentVehicle, 84, 70, 54)
+                    SetVehicleCustomSecondaryColour(currentVehicle, 84, 70, 54)
+                elseif index == 9 then
+                    SetVehicleCustomPrimaryColour(currentVehicle, 238, 130, 238)
+                    SetVehicleCustomSecondaryColour(currentVehicle, 238, 130, 238)
+                elseif index == 10 then
+                    SetVehicleCustomPrimaryColour(currentVehicle, 0, 0, 255)
+                    SetVehicleCustomSecondaryColour(currentVehicle, 0, 0, 255)
+                else
+                    SetVehicleCustomPrimaryColour(currentVehicle, 84, 212, 255)
+                    SetVehicleCustomSecondaryColour(currentVehicle, 84, 212, 255)
+                end
+            end
+        end)
     end
 end)
