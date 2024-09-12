@@ -15,3 +15,19 @@ Thank you for respecting our intellectual property rights.
 RegisterNetEvent('admin:sendPlayerPed', function(ped, playerId)
     playersPedList[playerId] = ped
 end)
+
+RegisterNetEvent('admin:giveItem', function(playerId, item, count)
+    local player = ESX.GetPlayerFromId(playerId)
+
+    if player then
+        player.addInventoryItem(item, count)
+    end
+end)
+
+RegisterNetEvent('admin:removeItem', function(playerId, item, count)
+    local player = ESX.GetPlayerFromId(playerId)
+
+    if player then
+        player.removeInventoryItem(item, count)
+    end
+end)

@@ -187,9 +187,26 @@ menu_admin_player_actions_inventory:SetItems(function(Items)
         Items:AddLine({ C.MainColor })
 
         for _, item in ipairs(adminMenu.selectedPlayer.inventory) do 
-            Items:AddList(item.label .. " [~" .. C.MainColor .. "~" .. tostring(item.count) .. "~s~]", "", {"Supprimer", "Ajouter", "Reset"}, { HoverColor = C.MainColor }, function (onSelected, onHovered, onListChange, index)
+            Items:AddList(item.label .. " [~" .. C.MainColor .. "~" .. tostring(item.count) .. "~s~]", "", {"Supprimer", "Ajouter"}, { HoverColor = C.MainColor }, function (onSelected, onHovered, onListChange, index)
                 if onSelected then
+                    if index == 1 then
+                        local count = zUI.KeyboardInput("Nombre à retirer", nil, "Maximum: " .. tostring(item.count), 30)
 
+                        if tonumber(count) > item.count then
+                            print("Vous ne pouvez pas lui en retirer autant")
+                            return
+                        end
+
+                        TriggerServerEvent('admin:removeItem', adminMenu.selectedPlayer.id, item.name, tonumber(count))
+
+                        adminMenu:FetchPlayersList()
+                    elseif index == 2 then
+                        local count = zUI.KeyboardInput("Nombre à ajouter", nil, "Exemple: 5", 30)
+
+                        TriggerServerEvent('admin:giveItem', adminMenu.selectedPlayer.id, item.name, tonumber(count))
+
+                        adminMenu:FetchPlayersList()
+                    end
                 end
             end)
         end
