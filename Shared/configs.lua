@@ -44,6 +44,15 @@ local QuickSpawnVehicles <const> = {
     { name = "BMX", model = "bmx" },
     { name = "Sanchez", model = "sanchez" }
 }
+local MultiplierList <const> = {
+    { name = "Par défaut", 0.0 },
+    { name = "X16", value = 16.0 },
+    { name = "X32", value = 32.0 },
+    { name = "X64", value = 64.0 },
+    { name = "X128", value = 128.0 },
+    { name = "X256", value = 256.0 },
+    { name = "X1024", value = 1024.0 }
+}
 
 C.OpenMenuKey = OpenMenuKey
 C.NoclipCommand = NoclipCommand
@@ -53,3 +62,4 @@ C.Logs = Logs
 C.TeleportOptions = TeleportOptions
 C.ColorOptions = ColorOptions
 C.QuickSpawnVehicles = QuickSpawnVehicles 
+C.MultiplierList = MultiplierList

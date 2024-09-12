@@ -23,6 +23,9 @@ function AdminMenu:new()
     self.invincibleMode = false
     self.visibleMode = true
     self.infiniteStamina = false
+    self.fastSwim = false
+    self.fastRun = false
+    self.highJump = false
     self.pedMode = false
     self.pedModel = nil
     self.playersList = {}
@@ -37,6 +40,7 @@ function AdminMenu:new()
     self.teleportOptions = {}
     self.colorOptions = {}
     self.quickSpawnList = {}
+    self.MultiplierList = {}
 
     return self
 end
@@ -69,6 +73,13 @@ function AdminMenu:initQuickSpawnList()
     end
 end
 
+--- Init la liste des multiplicateurs de vitesse
+function AdminMenu:initMultiplierList()
+    for _, multiplier in ipairs(C.MultiplierList) do
+        table.insert(self.MultiplierList, multiplier.name)
+    end
+end
+
 --- Active/Désactive une fonctionnalité
 ---@param feature string Nom de la fonctionnalité
 ---@param isChecked boolean Indique si la fonctionnalité doit être activée ou désactivée
@@ -85,8 +96,15 @@ function AdminMenu:ToggleFeature(feature, isChecked)
         self:initTelportOptions()
         self:initColorOptions()
         self:initQuickSpawnList()
+        self:initMultiplierList()
     elseif feature == "noclipActive" then
         self:ToggleNoClipMode(isChecked)
+    elseif feature == "fastSwim" then
+        SetSwimMultiplierForPlayer(self.currentPlayerId, isChecked and 1.49 or 1.0)
+    elseif feature == "fastRun" then
+        SetRunSprintMultiplierForPlayer(self.currentPlayerId, isChecked and 1.49 or 1.0)
+    elseif feature == "highJump" then
+        self:ToggleSuperJump()
     end
 end
 
@@ -252,4 +270,14 @@ function AdminMenu:SpawnVehicle(modelName, coords, heading)
             zUI.AlertInput("Avertissement !", nil, "Le véhicule est invalide !")
         end
     end
+end
+
+--- Active le super saut
+function AdminMenu:ToggleSuperJump()
+    CreateThread(function()
+        while self.highJump do
+            Wait(0)
+            SetSuperJumpThisFrame(self.currentPlayerId) -- Active le super saut lorsque le joueur saute
+        end
+    end)
 end
