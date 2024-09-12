@@ -12,12 +12,8 @@ https://discord.gg/fivedev
 Thank you for respecting our intellectual property rights.
 ]]
 
----@class AdminMenu
-AdminMenu = {}
-AdminMenu.__index = AdminMenu
-
-function AdminMenu:new()
-    local self = setmetatable({}, AdminMenu)
+function CreateMenuObject()
+    local self = {}
     
     self.staffMode = false
     self.invincibleMode = false
@@ -32,7 +28,6 @@ function AdminMenu:new()
     self.filteredPlayersList = {}  
     self.searchInput = ""
     self.selectedPlayer = nil
-    self.currentEntity = PlayerPedId()
     self.currentPlayerId = PlayerId()
     self.noclipActive = false
     self.noclipSpeed = 1.0
@@ -44,6 +39,9 @@ function AdminMenu:new()
 
     return self
 end
+
+---@class AdminMenu
+AdminMenu = CreateMenuObject()
 
 --- Récupère la liste des joueurs
 function AdminMenu:FetchPlayersList()

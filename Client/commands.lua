@@ -16,9 +16,9 @@ RegisterCommand(C.NoclipCommand, function(source, args, raw)
     local playerData = ESX.GetPlayerData()
 
     if playerData['group'] ~= 'user' then
-        if adminMenu.staffMode then
-            adminMenu.noclipActive = not adminMenu.noclipActive
-            adminMenu:ToggleFeature('noclipActive', adminMenu.noclipActive)
+        if AdminMenu.staffMode then
+            AdminMenu.noclipActive = not AdminMenu.noclipActive
+            AdminMenu:ToggleFeature('noclipActive', AdminMenu.noclipActive)
         else
             zUI.AlertInput("Avertissement !", nil, "Merci de ne pas utiliser le noclip quand votre mode staff n'est pas activé.")
         end

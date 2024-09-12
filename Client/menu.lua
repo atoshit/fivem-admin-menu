@@ -12,8 +12,6 @@ https://discord.gg/fivedev
 Thank you for respecting our intellectual property rights.
 ]]
 
-adminMenu = AdminMenu:new()
-
 menu_admin = zUI.CreateMenu("", "Menu Administration", nil, nil, C.MenuBanner)
 local menu_admin_self = zUI.CreateSubMenu(menu_admin, "", "Options Personnel")
 local menu_admin_vehicle = zUI.CreateSubMenu(menu_admin, "", "Gestion des véhicules")
@@ -33,7 +31,7 @@ local menu_admin_player_actions_inventory = zUI.CreateSubMenu(menu_admin_player_
 local function AddPlayerButton(Items, playerData, badge, subMenu)
     Items:AddButton("[" .. playerData.id .. "] " .. playerData.rpname, '', { HoverColor = C.MainColor, LeftBadge = badge }, function(onSelected, onHovered)
         if onSelected then
-            adminMenu.selectedPlayer = playerData
+            AdminMenu.selectedPlayer = playerData
         end
     end, subMenu) 
 end
@@ -52,11 +50,11 @@ local function AddAlertButton(Items, playerData, badge, message)
 end
 
 menu_admin:SetItems(function(Items)
-    Items:AddCheckbox("Mode Modération", "", adminMenu.staffMode, { LeftBadge = "NEW_STAR", HoverColor = C.MainColor }, function(onSelected, onHovered, isChecked)
-        if onSelected then adminMenu:ToggleFeature("staffMode", isChecked) end
+    Items:AddCheckbox("Mode Modération", "", AdminMenu.staffMode, { LeftBadge = "NEW_STAR", HoverColor = C.MainColor }, function(onSelected, onHovered, isChecked)
+        if onSelected then AdminMenu:ToggleFeature("staffMode", isChecked) end
     end)
 
-    if adminMenu.staffMode then
+    if AdminMenu.staffMode then
         Items:AddLine({ C.MainColor })
         Items:AddButton("Options Personnel", "", { RightLabel = '→', LeftBadge = "NEW_STAR", HoverColor = C.MainColor }, nil, menu_admin_self)
         Items:AddButton("Liste des joueurs", "", { RightLabel = '→', LeftBadge = "NEW_STAR", HoverColor = C.MainColor }, nil, menu_admin_players)
@@ -65,55 +63,55 @@ menu_admin:SetItems(function(Items)
 end)
 
 menu_admin_self:SetItems(function(Items)
-    Items:AddCheckbox("Noclip", "Activer/Désactiver le noclip", adminMenu.noclipActive, { HoverColor = C.MainColor }, function(onSelected, onHovered, isChecked)
-        if onSelected then adminMenu:ToggleFeature("noclipActive", isChecked) end
+    Items:AddCheckbox("Noclip", "Activer/Désactiver le noclip", AdminMenu.noclipActive, { HoverColor = C.MainColor }, function(onSelected, onHovered, isChecked)
+        if onSelected then AdminMenu:ToggleFeature("noclipActive", isChecked) end
     end)
 
-    Items:AddCheckbox("Invincible", "Activer/Désactiver l'invincibilité", adminMenu.invincibleMode, { HoverColor = C.MainColor }, function(onSelected, onHovered, isChecked)
-        if onSelected then adminMenu:ToggleFeature("invincibleMode", isChecked) end
+    Items:AddCheckbox("Invincible", "Activer/Désactiver l'invincibilité", AdminMenu.invincibleMode, { HoverColor = C.MainColor }, function(onSelected, onHovered, isChecked)
+        if onSelected then AdminMenu:ToggleFeature("invincibleMode", isChecked) end
     end)
 
-    Items:AddCheckbox("Visible", "Activer/Désactiver l'invisibilité", adminMenu.visibleMode, { HoverColor = C.MainColor }, function(onSelected, onHovered, isChecked)
-        if onSelected then adminMenu:ToggleFeature("visibleMode", isChecked) end
+    Items:AddCheckbox("Visible", "Activer/Désactiver l'invisibilité", AdminMenu.visibleMode, { HoverColor = C.MainColor }, function(onSelected, onHovered, isChecked)
+        if onSelected then AdminMenu:ToggleFeature("visibleMode", isChecked) end
     end)
 
-    Items:AddCheckbox("Stamina Infinie", "Activer/Desactiver la stamina infinie", adminMenu.infiniteStamina, { HoverColor = C.MainColor }, function(onSelected, onHovered, isChecked)
-        if onSelected then adminMenu:ToggleFeature("infiniteStamina", isChecked) end
+    Items:AddCheckbox("Stamina Infinie", "Activer/Desactiver la stamina infinie", AdminMenu.infiniteStamina, { HoverColor = C.MainColor }, function(onSelected, onHovered, isChecked)
+        if onSelected then AdminMenu:ToggleFeature("infiniteStamina", isChecked) end
     end)
 
-    Items:AddCheckbox("Vitesse de nage rapide", "Activer/Désactiver la vitesse de nage rapide", adminMenu.fastSwim, { HoverColor = C.MainColor }, function(onSelected, onHovered, isChecked)
-        if onSelected then adminMenu:ToggleFeature("fastSwim", isChecked) end
+    Items:AddCheckbox("Vitesse de nage rapide", "Activer/Désactiver la vitesse de nage rapide", AdminMenu.fastSwim, { HoverColor = C.MainColor }, function(onSelected, onHovered, isChecked)
+        if onSelected then AdminMenu:ToggleFeature("fastSwim", isChecked) end
     end)
 
-    Items:AddCheckbox("Vitesse de course rapide", "Activer/Désactiver la vitesse de course rapide", adminMenu.fastRun, { HoverColor = C.MainColor }, function(onSelected, onHovered, isChecked)
-        if onSelected then adminMenu:ToggleFeature("fastRun", isChecked) end
+    Items:AddCheckbox("Vitesse de course rapide", "Activer/Désactiver la vitesse de course rapide", AdminMenu.fastRun, { HoverColor = C.MainColor }, function(onSelected, onHovered, isChecked)
+        if onSelected then AdminMenu:ToggleFeature("fastRun", isChecked) end
     end)
 
-    Items:AddCheckbox("Super saut", "Activer/Désactiver le saut très haut", adminMenu.highJump, { HoverColor = C.MainColor }, function(onSelected, onHovered, isChecked)
-        if onSelected then adminMenu:ToggleFeature("highJump", isChecked) end
+    Items:AddCheckbox("Super saut", "Activer/Désactiver le saut très haut", AdminMenu.highJump, { HoverColor = C.MainColor }, function(onSelected, onHovered, isChecked)
+        if onSelected then AdminMenu:ToggleFeature("highJump", isChecked) end
     end)
 
     Items:AddButton("Heal", "Se guérir complètement", { HoverColor = C.MainColor }, function(onSelected, onHovered)
-        if onSelected then adminMenu:Heal() end
+        if onSelected then AdminMenu:Heal() end
     end)
 
     Items:AddButton("Armure", "S'ajouter de l'armure", { HoverColor = C.MainColor }, function(onSelected, onHovered)
         if onSelected then
             local amount = zUI.KeyboardInput("Quantité d'armure", nil, "Exemple: 60", 3)
-            adminMenu:GiveArmor(tonumber(amount))
+            AdminMenu:GiveArmor(tonumber(amount))
         end
     end)
 
-    if not adminMenu.pedMode then
+    if not AdminMenu.pedMode then
         Items:AddButton("Ped", "Changer son ped", { HoverColor = C.MainColor }, function(onSelected, onHovered)
             if onSelected then
                 local model = zUI.KeyboardInput("Ped", nil, "Exemple: a_f_m_salton_01", 30)
-                adminMenu:ChangePedModel(model)
+                AdminMenu:ChangePedModel(model)
             end
         end)
     else
         Items:AddButton("~#f16625~Reprendre son personnage~s~", "Reprendre son personnage d'origine", { HoverColor = C.MainColor }, function(onSelected, onHovered)
-            if onSelected then adminMenu:RevertToPlayerModel() end
+            if onSelected then AdminMenu:RevertToPlayerModel() end
         end)
     end
 end)
@@ -121,14 +119,14 @@ end)
 menu_admin_players:SetItems(function(Items)
     Items:AddButton("Rechercher un joueur", '', { HoverColor = C.MainColor, LeftBadge = "ARROW_RIGHT" }, function(onSelected, onHovered)
         if onSelected then
-            adminMenu.searchInput = zUI.KeyboardInput("Recherche", nil, "Exemple: Lenny", 30)
-            adminMenu.filteredPlayersList = {}
+            AdminMenu.searchInput = zUI.KeyboardInput("Recherche", nil, "Exemple: Lenny", 30)
+            AdminMenu.filteredPlayersList = {}
 
-            for _, player in ipairs(adminMenu.playersList) do
-                if not adminMenu.searchInput or adminMenu.searchInput == "" or 
-                   string.find(string.lower(player.rpname), string.lower(adminMenu.searchInput)) or
-                   string.find(tostring(player.id), tostring(adminMenu.searchInput)) then
-                    table.insert(adminMenu.filteredPlayersList, player)
+            for _, player in ipairs(AdminMenu.playersList) do
+                if not AdminMenu.searchInput or AdminMenu.searchInput == "" or 
+                   string.find(string.lower(player.rpname), string.lower(AdminMenu.searchInput)) or
+                   string.find(tostring(player.id), tostring(AdminMenu.searchInput)) then
+                    table.insert(AdminMenu.filteredPlayersList, player)
                 end
             end
         end
@@ -136,7 +134,7 @@ menu_admin_players:SetItems(function(Items)
 
     Items:AddLine({ C.MainColor })
 
-    local playersToShow = #adminMenu.filteredPlayersList > 0 and adminMenu.filteredPlayersList or adminMenu.playersList
+    local playersToShow = #AdminMenu.filteredPlayersList > 0 and AdminMenu.filteredPlayersList or AdminMenu.playersList
 
     for _, playerData in ipairs(playersToShow) do
         --if tonumber(playerData.id) == tonumber(GetPlayerServerId(PlayerId())) then
@@ -150,8 +148,8 @@ menu_admin_players:SetItems(function(Items)
 end)
 
 menu_admin_player:SetItems(function(Items)
-    if adminMenu.selectedPlayer then
-        Items:AddSeparator("[" .. adminMenu.selectedPlayer.id .. "] " .. adminMenu.selectedPlayer.rpname)
+    if AdminMenu.selectedPlayer then
+        Items:AddSeparator("[" .. AdminMenu.selectedPlayer.id .. "] " .. AdminMenu.selectedPlayer.rpname)
         Items:AddLine({ C.MainColor })
         Items:AddButton("Informations", "", { RightLabel = '→', HoverColor = C.MainColor }, nil, menu_admin_player_infos)
         Items:AddButton("Troll", "", { RightLabel = '→', HoverColor = C.MainColor }, nil, menu_admin_player_troll)
@@ -161,32 +159,32 @@ menu_admin_player:SetItems(function(Items)
 end)
 
 menu_admin_player_infos:SetItems(function(Items)
-    if adminMenu.selectedPlayer then
-        Items:AddSeparator("[" .. adminMenu.selectedPlayer.id .. "] " .. adminMenu.selectedPlayer.rpname)
-        Items:AddSeparator("Liquide: ~#50f41c~" .. adminMenu.selectedPlayer.accounts[2].money .. "~s~$")
-        Items:AddSeparator("Banque: ~#50f41c~" .. adminMenu.selectedPlayer.accounts[3].money .. "~s~$")
-        Items:AddSeparator("Job: ~#1862ed~" .. adminMenu.selectedPlayer.job.label .. "~s~")
-        Items:AddSeparator("Grade: ~#1862ed~" .. adminMenu.selectedPlayer.job.grade_label .. "~s~")
-        Items:AddSeparator("Salaire Automatique: ~#1862ed~" .. adminMenu.selectedPlayer.job.grade_salary .. "~s~$")
-        Items:AddSeparator("Groupe: ~#eda618~" .. adminMenu.selectedPlayer.group .. "~s~")
-        Items:AddSeparator("Discord ID: ~#eda618~" .. adminMenu.selectedPlayer.discord_id .. "~s~")
+    if AdminMenu.selectedPlayer then
+        Items:AddSeparator("[" .. AdminMenu.selectedPlayer.id .. "] " .. AdminMenu.selectedPlayer.rpname)
+        Items:AddSeparator("Liquide: ~#50f41c~" .. AdminMenu.selectedPlayer.accounts[2].money .. "~s~$")
+        Items:AddSeparator("Banque: ~#50f41c~" .. AdminMenu.selectedPlayer.accounts[3].money .. "~s~$")
+        Items:AddSeparator("Job: ~#1862ed~" .. AdminMenu.selectedPlayer.job.label .. "~s~")
+        Items:AddSeparator("Grade: ~#1862ed~" .. AdminMenu.selectedPlayer.job.grade_label .. "~s~")
+        Items:AddSeparator("Salaire Automatique: ~#1862ed~" .. AdminMenu.selectedPlayer.job.grade_salary .. "~s~$")
+        Items:AddSeparator("Groupe: ~#eda618~" .. AdminMenu.selectedPlayer.group .. "~s~")
+        Items:AddSeparator("Discord ID: ~#eda618~" .. AdminMenu.selectedPlayer.discord_id .. "~s~")
     end
 end)
 
 menu_admin_player_actions:SetItems(function(Items)
-    if adminMenu.selectedPlayer then
-        Items:AddSeparator("[" .. adminMenu.selectedPlayer.id .. "] " .. adminMenu.selectedPlayer.rpname)
+    if AdminMenu.selectedPlayer then
+        Items:AddSeparator("[" .. AdminMenu.selectedPlayer.id .. "] " .. AdminMenu.selectedPlayer.rpname)
         Items:AddLine({ C.MainColor })
         Items:AddButton("Inventaire", "", { RightLabel = '→', HoverColor = C.MainColor }, nil, menu_admin_player_actions_inventory)
     end
 end)
 
 menu_admin_player_actions_inventory:SetItems(function(Items)
-    if adminMenu.selectedPlayer then
-        Items:AddSeparator("[" .. adminMenu.selectedPlayer.id .. "] " .. adminMenu.selectedPlayer.rpname)
+    if AdminMenu.selectedPlayer then
+        Items:AddSeparator("[" .. AdminMenu.selectedPlayer.id .. "] " .. AdminMenu.selectedPlayer.rpname)
         Items:AddLine({ C.MainColor })
 
-        for _, item in ipairs(adminMenu.selectedPlayer.inventory) do 
+        for _, item in pairs(AdminMenu.selectedPlayer.inventory) do 
             Items:AddList(item.label .. " [~" .. C.MainColor .. "~" .. tostring(item.count) .. "~s~]", "", {"Supprimer", "Ajouter"}, { HoverColor = C.MainColor }, function (onSelected, onHovered, onListChange, index)
                 if onSelected then
                     if index == 1 then
@@ -197,15 +195,15 @@ menu_admin_player_actions_inventory:SetItems(function(Items)
                             return
                         end
 
-                        TriggerServerEvent('admin:removeItem', adminMenu.selectedPlayer.id, item.name, tonumber(count))
+                        TriggerServerEvent('admin:removeItem', AdminMenu.selectedPlayer.id, item.name, tonumber(count))
 
-                        adminMenu:FetchPlayersList()
+                        AdminMenu:FetchPlayersList()
                     elseif index == 2 then
                         local count = zUI.KeyboardInput("Nombre à ajouter", nil, "Exemple: 5", 30)
 
-                        TriggerServerEvent('admin:giveItem', adminMenu.selectedPlayer.id, item.name, tonumber(count))
+                        TriggerServerEvent('admin:giveItem', AdminMenu.selectedPlayer.id, item.name, tonumber(count))
 
-                        adminMenu:FetchPlayersList()
+                        AdminMenu:FetchPlayersList()
                     end
                 end
             end)
@@ -214,11 +212,11 @@ menu_admin_player_actions_inventory:SetItems(function(Items)
 end)
 
 menu_admin_player_troll:SetItems(function(Items)
-    if adminMenu.selectedPlayer then
-        Items:AddSeparator("[" .. adminMenu.selectedPlayer.id .. "] " .. adminMenu.selectedPlayer.rpname)
+    if AdminMenu.selectedPlayer then
+        Items:AddSeparator("[" .. AdminMenu.selectedPlayer.id .. "] " .. AdminMenu.selectedPlayer.rpname)
 
-        if IsPedInAnyVehicle(adminMenu.selectedPlayer.ped, false) then
-            local playerVehicle = GetVehiclePedIsIn(adminMenu.selectedPlayer.ped, false)
+        if IsPedInAnyVehicle(AdminMenu.selectedPlayer.ped, false) then
+            local playerVehicle = GetVehiclePedIsIn(AdminMenu.selectedPlayer.ped, false)
             
             if DoesEntityExist(playerVehicle) then
 
@@ -230,7 +228,7 @@ menu_admin_player_troll:SetItems(function(Items)
                     end
                 end)
 
-                Items:AddList("Changer la couleur", "", adminMenu.colorOptions, {}, function (onSelected, onHovered, onListChange, index)
+                Items:AddList("Changer la couleur", "", AdminMenu.colorOptions, {}, function (onSelected, onHovered, onListChange, index)
                     if onSelected then
 
                         local selectedColor = C.ColorOptions[index] 
@@ -315,39 +313,39 @@ menu_admin_player_troll:SetItems(function(Items)
 
         Items:AddLine({ C.MainColor })
 
-        if not adminMenu.selectedPlayer.freeze then
+        if not AdminMenu.selectedPlayer.freeze then
             Items:AddButton("Freeze", '', { HoverColor = C.MainColor }, function(onSelected, onHovered)
                 if onSelected then
-                    FreezeEntityPosition(adminMenu.selectedPlayer.ped, true)
-                    adminMenu.selectedPlayer.freeze = true
+                    FreezeEntityPosition(AdminMenu.selectedPlayer.ped, true)
+                    AdminMenu.selectedPlayer.freeze = true
                 end
             end)
         else
             Items:AddButton("~#f16625~Unfreeze~s~", '', { HoverColor = C.MainColor }, function(onSelected, onHovered)
                 if onSelected then
-                    FreezeEntityPosition(adminMenu.selectedPlayer.ped, false)
-                    adminMenu.selectedPlayer.freeze = false
+                    FreezeEntityPosition(AdminMenu.selectedPlayer.ped, false)
+                    AdminMenu.selectedPlayer.freeze = false
                 end
             end)
         end
 
-        if not adminMenu.selectedPlayer.inFire then
+        if not AdminMenu.selectedPlayer.inFire then
             Items:AddButton("Bruler le joueur", '', { HoverColor = C.MainColor }, function(onSelected, onHovered)
                 if onSelected then
-                    StartEntityFire(adminMenu.selectedPlayer.ped) 
-                    adminMenu.selectedPlayer.inFire = true
+                    StartEntityFire(AdminMenu.selectedPlayer.ped) 
+                    AdminMenu.selectedPlayer.inFire = true
                 end
             end)
         else
             Items:AddButton("~#f16625~Arrêter de le bruler~s~", '', { HoverColor = C.MainColor }, function(onSelected, onHovered)
                 if onSelected then
-                    StopEntityFire(adminMenu.selectedPlayer.ped) 
-                    adminMenu.selectedPlayer.inFire = false
+                    StopEntityFire(AdminMenu.selectedPlayer.ped) 
+                    AdminMenu.selectedPlayer.inFire = false
                 end
             end)
         end
 
-        if IsPedRagdoll(adminMenu.selectedPlayer.ped) then
+        if IsPedRagdoll(AdminMenu.selectedPlayer.ped) then
             Items:AddButton("~#f16625~Le joueur est par terre...~s~", '', { HoverColor = C.MainColor }, function(onSelected, onHovered)
                 if onSelected then
                 end
@@ -355,48 +353,48 @@ menu_admin_player_troll:SetItems(function(Items)
         else
             Items:AddButton("Faire tomber le joueur", '', { HoverColor = C.MainColor }, function(onSelected, onHovered)
                 if onSelected then
-                    SetPedToRagdoll(adminMenu.selectedPlayer.ped, 5000, 5000, 0, false, false, false)
+                    SetPedToRagdoll(AdminMenu.selectedPlayer.ped, 5000, 5000, 0, false, false, false)
                 end
             end)
         end
 
         Items:AddButton("~#ed1818~Tuer~s~", '', { HoverColor = C.MainColor }, function(onSelected, onHovered)
             if onSelected then
-                SetEntityHealth(adminMenu.selectedPlayer.ped, 0)
+                SetEntityHealth(AdminMenu.selectedPlayer.ped, 0)
             end
         end)
     end
 end)
 
 menu_admin_player_teleport:SetItems(function(Items)
-    if adminMenu.selectedPlayer then
-        Items:AddSeparator("[" .. adminMenu.selectedPlayer.id .. "] " .. adminMenu.selectedPlayer.rpname)
+    if AdminMenu.selectedPlayer then
+        Items:AddSeparator("[" .. AdminMenu.selectedPlayer.id .. "] " .. AdminMenu.selectedPlayer.rpname)
 
         Items:AddLine({ C.MainColor })
 
-        Items:AddList("Téléportation Rapide", "", adminMenu.teleportOptions, {}, function (onSelected, onHovered, onListChange, index)
+        Items:AddList("Téléportation Rapide", "", AdminMenu.teleportOptions, {}, function (onSelected, onHovered, onListChange, index)
             if onSelected then
                 local teleportLocation = C.TeleportOptions[index] 
                 
-                if IsPedInAnyVehicle(adminMenu.selectedPlayer.ped, false) then
-                    SetPedCoordsKeepVehicle(adminMenu.selectedPlayer.ped, teleportLocation.coords.x, teleportLocation.coords.y, teleportLocation.coords.z)
+                if IsPedInAnyVehicle(AdminMenu.selectedPlayer.ped, false) then
+                    SetPedCoordsKeepVehicle(AdminMenu.selectedPlayer.ped, teleportLocation.coords.x, teleportLocation.coords.y, teleportLocation.coords.z)
                 else
-                    SetEntityCoords(adminMenu.selectedPlayer.ped, teleportLocation.coords.x, teleportLocation.coords.y, teleportLocation.coords.z)
+                    SetEntityCoords(AdminMenu.selectedPlayer.ped, teleportLocation.coords.x, teleportLocation.coords.y, teleportLocation.coords.z)
                 end
             end
         end)
 
         Items:AddButton("Téléporter sur lui", '', { HoverColor = C.MainColor }, function(onSelected, onHovered)
             if onSelected then
-                local playerCoords = GetEntityCoords(adminMenu.selectedPlayer.ped)
-                SetEntityCoords(adminMenu.currentEntity, playerCoords.x, playerCoords.y, playerCoords.z)
+                local playerCoords = GetEntityCoords(AdminMenu.selectedPlayer.ped)
+                SetEntityCoords(PlayerPedId(), playerCoords.x, playerCoords.y, playerCoords.z)
             end
         end)
 
         Items:AddButton("Téléporter sur moi", '', { HoverColor = C.MainColor }, function(onSelected, onHovered)
             if onSelected then
-                local playerCoords = GetEntityCoords(adminMenu.currentEntity)
-                SetEntityCoords(adminMenu.selectedPlayer.ped, playerCoords.x, playerCoords.y, playerCoords.z)
+                local playerCoords = GetEntityCoords(PlayerPedId())
+                SetEntityCoords(AdminMenu.selectedPlayer.ped, playerCoords.x, playerCoords.y, playerCoords.z)
             end
         end)
     end
@@ -405,43 +403,43 @@ end)
 menu_admin_vehicle:SetItems(function(Items)
     Items:AddButton("Spawn un véhicule", "", { HoverColor = C.MainColor }, function(onSelected, onHovered)
         if onSelected then
-            if IsPedInAnyVehicle(adminMenu.currentEntity, false) then
+            if IsPedInAnyVehicle(PlayerPedId(), false) then
                 zUI.AlertInput("Avertissement !", nil, "Vous êtes déjà dans un véhicule.")
                 return
             end
 
             local model = zUI.KeyboardInput("Modèle du véhicule", nil, "Exemple: sou_300dem", 30)
-            local spawnCoords = GetEntityCoords(adminMenu.currentEntity)
-            local spawnHeading = GetEntityHeading(adminMenu.currentEntity)
-            adminMenu:SpawnVehicle(model, spawnCoords, spawnHeading)
+            local spawnCoords = GetEntityCoords(PlayerPedId())
+            local spawnHeading = GetEntityHeading(PlayerPedId())
+            AdminMenu:SpawnVehicle(model, spawnCoords, spawnHeading)
         end
     end)
 
-    Items:AddList("Spawn Rapide", "", adminMenu.quickSpawnList, {}, function (onSelected, onHovered, onListChange, index)
+    Items:AddList("Spawn Rapide", "", AdminMenu.quickSpawnList, {}, function (onSelected, onHovered, onListChange, index)
         if onSelected then
-            if IsPedInAnyVehicle(adminMenu.currentEntity, false) then
+            if IsPedInAnyVehicle(PlayerPedId(), false) then
                 zUI.AlertInput("Avertissement !", nil, "Vous êtes déjà dans un véhicule.")
                 return
             end
 
-            local spawnCoords = GetEntityCoords(adminMenu.currentEntity)
-            local spawnHeading = GetEntityHeading(adminMenu.currentEntity)
+            local spawnCoords = GetEntityCoords(PlayerPedId())
+            local spawnHeading = GetEntityHeading(PlayerPedId())
     
             local selectedVehicle = C.QuickSpawnVehicles[index] -- Récupère le modèle du véhicule sélectionné
             if selectedVehicle then
-                adminMenu:SpawnVehicle(selectedVehicle.model, spawnCoords, spawnHeading)
+                AdminMenu:SpawnVehicle(selectedVehicle.model, spawnCoords, spawnHeading)
             end
         end
     end)
 
-    if IsPedInAnyVehicle(adminMenu.currentEntity, false) then
-        local currentVehicle = GetVehiclePedIsIn(adminMenu.currentEntity, false)
+    if IsPedInAnyVehicle(PlayerPedId(), false) then
+        local currentVehicle = GetVehiclePedIsIn(PlayerPedId(), false)
 
         Items:AddLine({ C.MainColor })
 
         Items:AddButton("Supprimer un véhicule", "", { HoverColor = C.MainColor }, function(onSelected, onHovered)
             if onSelected then
-                local vehicle = GetVehiclePedIsIn(adminMenu.currentEntity, false)
+                local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
                 DeleteEntity(vehicle)
             end
         end)
@@ -459,7 +457,7 @@ menu_admin_vehicle:SetItems(function(Items)
             end
         end)
 
-        Items:AddList("Changer la couleur", "", adminMenu.colorOptions, {}, function (onSelected, onHovered, onListChange, index)
+        Items:AddList("Changer la couleur", "", AdminMenu.colorOptions, {}, function (onSelected, onHovered, onListChange, index)
             if onSelected then
                 local selectedColor = C.ColorOptions[index] 
                 local primaryColor = selectedColor.primary
@@ -472,7 +470,7 @@ menu_admin_vehicle:SetItems(function(Items)
             end
         end)
 
-        Items:AddList("Multiplicateur de vitesse", "", adminMenu.MultiplierList, {}, function (onSelected, onHovered, onListChange, index)
+        Items:AddList("Multiplicateur de vitesse", "", AdminMenu.MultiplierList, {}, function (onSelected, onHovered, onListChange, index)
             if onSelected then
                 local selectedMultiplier = C.MultiplierList[index]
                 local multiplierValue = selectedMultiplier.value
