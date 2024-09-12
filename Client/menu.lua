@@ -151,9 +151,17 @@ menu_admin_player:SetItems(function(Items)
     if AdminMenu.selectedPlayer then
         Items:AddSeparator("[" .. AdminMenu.selectedPlayer.id .. "] " .. AdminMenu.selectedPlayer.rpname)
         Items:AddLine({ C.MainColor })
-        Items:AddButton("Informations", "", { RightLabel = '→', HoverColor = C.MainColor }, nil, menu_admin_player_infos)
+        Items:AddButton("Informations", "", { RightLabel = '→', HoverColor = C.MainColor }, function (onSelected)
+            if onSelected then
+                TriggerServerEvent('admin:requestPlayerData', AdminMenu.selectedPlayer.id)
+            end
+        end, menu_admin_player_infos)
         Items:AddButton("Troll", "", { RightLabel = '→', HoverColor = C.MainColor }, nil, menu_admin_player_troll)
-        Items:AddButton("Actions", "", { RightLabel = '→', HoverColor = C.MainColor }, nil, menu_admin_player_actions)
+        Items:AddButton("Actions", "", { RightLabel = '→', HoverColor = C.MainColor }, function (onSelected)
+            if onSelected then
+                TriggerServerEvent('admin:requestPlayerData', AdminMenu.selectedPlayer.id)
+            end
+        end, menu_admin_player_actions)
         Items:AddButton("Téléportation", "", { RightLabel = '→', HoverColor = C.MainColor }, nil, menu_admin_player_teleport)
     end
 end)
@@ -184,29 +192,33 @@ menu_admin_player_actions_inventory:SetItems(function(Items)
         Items:AddSeparator("[" .. AdminMenu.selectedPlayer.id .. "] " .. AdminMenu.selectedPlayer.rpname)
         Items:AddLine({ C.MainColor })
 
-        for _, item in pairs(AdminMenu.selectedPlayer.inventory) do 
-            Items:AddList(item.label .. " [~" .. C.MainColor .. "~" .. tostring(item.count) .. "~s~]", "", {"Supprimer", "Ajouter"}, { HoverColor = C.MainColor }, function (onSelected, onHovered, onListChange, index)
-                if onSelected then
-                    if index == 1 then
-                        local count = zUI.KeyboardInput("Nombre à retirer", nil, "Maximum: " .. tostring(item.count), 30)
+        if #AdminMenu.selectedPlayer.inventory < 1 then
+            Items:AddSeparator(AdminMenu.selectedPlayer.rpname .. " possède aucun item.")
+        else
+            for _, item in pairs(AdminMenu.selectedPlayer.inventory) do 
+                Items:AddList(item.label .. " [~" .. C.MainColor .. "~" .. tostring(item.count) .. "~s~]", "", {"Supprimer", "Ajouter"}, { HoverColor = C.MainColor }, function (onSelected, onHovered, onListChange, index)
+                    if onSelected then
+                        if index == 1 then
+                            local count = zUI.KeyboardInput("Nombre à retirer", nil, "Maximum: " .. tostring(item.count), 30)
 
-                        if tonumber(count) > item.count then
-                            print("Vous ne pouvez pas lui en retirer autant")
-                            return
+                            if tonumber(count) > item.count then
+                                print("Vous ne pouvez pas lui en retirer autant")
+                                return
+                            end
+
+                            TriggerServerEvent('admin:removeItem', AdminMenu.selectedPlayer.id, item.name, tonumber(count))
+
+                            TriggerServerEvent('admin:requestPlayerData', AdminMenu.selectedPlayer.id)
+                        elseif index == 2 then
+                            local count = zUI.KeyboardInput("Nombre à ajouter", nil, "Exemple: 5", 30)
+
+                            TriggerServerEvent('admin:giveItem', AdminMenu.selectedPlayer.id, item.name, tonumber(count))
+
+                            TriggerServerEvent('admin:requestPlayerData', AdminMenu.selectedPlayer.id)
                         end
-
-                        TriggerServerEvent('admin:removeItem', AdminMenu.selectedPlayer.id, item.name, tonumber(count))
-
-                        AdminMenu:FetchPlayersList()
-                    elseif index == 2 then
-                        local count = zUI.KeyboardInput("Nombre à ajouter", nil, "Exemple: 5", 30)
-
-                        TriggerServerEvent('admin:giveItem', AdminMenu.selectedPlayer.id, item.name, tonumber(count))
-
-                        AdminMenu:FetchPlayersList()
                     end
-                end
-            end)
+                end)
+            end
         end
     end
 end)
@@ -329,7 +341,7 @@ menu_admin_player_troll:SetItems(function(Items)
             end)
         end
 
-        if not AdminMenu.selectedPlayer.inFire then
+        if not IsEntityOnFire(PlayerPedId()) then
             Items:AddButton("Bruler le joueur", '', { HoverColor = C.MainColor }, function(onSelected, onHovered)
                 if onSelected then
                     StartEntityFire(AdminMenu.selectedPlayer.ped) 

@@ -16,3 +16,10 @@ RegisterNetEvent('admin:getPlayerPed', function(playerId)
     local playerPed = PlayerPedId() 
     TriggerServerEvent('admin:sendPlayerPed', playerPed, playerId)
 end)
+
+RegisterNetEvent('admin:updatePlayerData')
+AddEventHandler('admin:updatePlayerData', function(playerData)
+    if playerData and AdminMenu.selectedPlayer and playerData.id == AdminMenu.selectedPlayer.id then
+        AdminMenu.selectedPlayer = playerData
+    end
+end)

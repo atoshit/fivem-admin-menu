@@ -16,7 +16,7 @@ playersPedList = {}
 
 ESX.RegisterServerCallback('admin:getPlayersList', function(source, cb)
     local playerList = {}
-    playersPedList = {} 
+    playersPedList = {}
 
     for _, playerId in ipairs(GetPlayers()) do
         local xPlayer = ESX.GetPlayerFromId(playerId)
@@ -36,8 +36,7 @@ ESX.RegisterServerCallback('admin:getPlayersList', function(source, cb)
             inventory = xPlayer.getInventory(),
             job = xPlayer.getJob(),
             ped = nil,
-            freeze = false,
-            inFire = false
+            freeze = false
         }
 
         TriggerClientEvent('admin:getPlayerPed', playerId, playerId)

@@ -31,3 +31,26 @@ RegisterNetEvent('admin:removeItem', function(playerId, item, count)
         player.removeInventoryItem(item, count)
     end
 end)
+
+RegisterNetEvent('admin:requestPlayerData')
+AddEventHandler('admin:requestPlayerData', function(playerId)
+    local xPlayer = ESX.GetPlayerFromId(playerId)
+    if xPlayer then
+        local playerData = {
+            id = playerId,
+            discord_id = GetPlayerIdentifier(playerId, 1) or 'Introuvable',
+            rpname = xPlayer.getName(),
+            name = GetPlayerName(playerId),
+            identifier = xPlayer.identifier,
+            group = xPlayer.getGroup(),
+            accounts = xPlayer.getAccounts(),
+            coords = xPlayer.getCoords(true),
+            inventory = xPlayer.getInventory(),
+            job = xPlayer.getJob(),
+            ped = playersPedList[playerId] or nil,
+            freeze = false
+        }
+
+        TriggerClientEvent('admin:updatePlayerData', source, playerData)
+    end
+end)
