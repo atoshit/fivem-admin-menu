@@ -110,7 +110,7 @@ menu_admin_self:SetItems(function(Items)
             end
         end)
     else
-        Items:AddButton("Reprendre son personnage", "Reprendre son personnage d'origine", { HoverColor = "#f16625" }, function(onSelected, onHovered)
+        Items:AddButton("~#f16625~Reprendre son personnage~s~", "Reprendre son personnage d'origine", { HoverColor = "#f16625" }, function(onSelected, onHovered)
             if onSelected then adminMenu:RevertToPlayerModel() end
         end)
     end
@@ -180,6 +180,102 @@ menu_admin_player_troll:SetItems(function(Items)
     if adminMenu.selectedPlayer then
         Items:AddSeparator("[" .. adminMenu.selectedPlayer.id .. "] " .. adminMenu.selectedPlayer.rpname)
 
+        if IsPedInAnyVehicle(adminMenu.selectedPlayer.ped, false) then
+            local playerVehicle = GetVehiclePedIsIn(adminMenu.selectedPlayer.ped, false)
+            
+            if DoesEntityExist(playerVehicle) then
+
+                Items:AddLine({ "#f16625" })
+
+                Items:AddButton("Supprimer la voiture", '', { HoverColor = "#f16625" }, function(onSelected, onHovered)
+                    if onSelected then
+                        DeleteEntity(playerVehicle)
+                    end
+                end)
+
+                Items:AddList("Changer la couleur", "", adminMenu.colorOptions, {}, function (onSelected, onHovered, onListChange, index)
+                    if onSelected then
+
+                        local selectedColor = C.ColorOptions[index] 
+                        local primaryColor = selectedColor.primary
+                        local secondaryColor = selectedColor.secondary
+                
+                        if playerVehicle then
+                            SetVehicleCustomPrimaryColour(playerVehicle, primaryColor[1], primaryColor[2], primaryColor[3])
+                            SetVehicleCustomSecondaryColour(playerVehicle, secondaryColor[1], secondaryColor[2], secondaryColor[3])
+                        end
+                    end
+                end)
+
+                local engineHealth = GetVehicleEngineHealth(playerVehicle)
+                local fuelLevel = GetVehicleFuelLevel(playerVehicle)
+
+                if engineHealth ~= engineHealth then
+                    print("Invalid Motor Healt, init now")
+                    engineHealth = 1000.0
+                    SetVehicleEngineHealth(playerVehicle, -engineHealth)
+                end
+
+                if engineHealth < 0 then
+                    Items:AddButton("~#f16625~Réparer le moteur~s~", '', { HoverColor = "#f16625" }, function(onSelected, onHovered)
+                        if onSelected then
+                            SetVehicleFixed(playerVehicle)
+                            SetVehicleDeformationFixed(playerVehicle)
+                        end
+                    end)
+                else
+                    Items:AddButton("Casser le moteur", '', { HoverColor = "#f16625" }, function(onSelected, onHovered)
+                        if onSelected then
+                            SetVehicleEngineHealth(playerVehicle, -2000)
+                        end
+                    end)
+                end
+
+                if fuelLevel > 10 then
+                    Items:AddButton("Vider l'essence", '', { HoverColor = "#f16625" }, function(onSelected, onHovered)
+                        if onSelected then
+                            SetVehicleFuelLevel(playerVehicle, 2.0)
+                        end
+                    end)
+                else
+                    Items:AddButton("~#f16625~Mettre le plein~s~", '', { HoverColor = "#f16625" }, function(onSelected, onHovered)
+                        if onSelected then
+                            SetVehicleFuelLevel(playerVehicle, 100.0)
+                        end
+                    end)
+                end
+
+                local allTyresIntact = true
+                local anyTyreBurst = false
+
+                for i = 0, 5 do
+                    if IsVehicleTyreBurst(playerVehicle, i, false) then
+                        anyTyreBurst = true
+                        allTyresIntact = false
+                        break
+                    end
+                end
+
+                if anyTyreBurst then
+                    Items:AddButton("~#f16625~Réparer les pneus~s~", '', { HoverColor = "#f16625" }, function(onSelected, onHovered)
+                        if onSelected then
+                            for i = 0, 5 do
+                                SetVehicleTyreFixed(playerVehicle, i)
+                            end
+                        end
+                    end)
+                elseif allTyresIntact then
+                    Items:AddButton("Crever les 4 pneus", '', { HoverColor = "#f16625" }, function(onSelected, onHovered)
+                        if onSelected then
+                            for i = 0, 5 do
+                                SetVehicleTyreBurst(playerVehicle, i, true, 1000.0)
+                            end
+                        end
+                    end)
+                end
+            end
+        end
+
         Items:AddLine({ "#f16625" })
 
         if not adminMenu.selectedPlayer.freeze then
@@ -190,7 +286,7 @@ menu_admin_player_troll:SetItems(function(Items)
                 end
             end)
         else
-            Items:AddButton("Unfreeze", '', { HoverColor = "#f16625" }, function(onSelected, onHovered)
+            Items:AddButton("~#f16625~Unfreeze~s~", '', { HoverColor = "#f16625" }, function(onSelected, onHovered)
                 if onSelected then
                     FreezeEntityPosition(adminMenu.selectedPlayer.ped, false)
                     adminMenu.selectedPlayer.freeze = false
@@ -206,10 +302,23 @@ menu_admin_player_troll:SetItems(function(Items)
                 end
             end)
         else
-            Items:AddButton("Arrêter de le bruler", '', { HoverColor = "#f16625" }, function(onSelected, onHovered)
+            Items:AddButton("~#f16625~Arrêter de le bruler~s~", '', { HoverColor = "#f16625" }, function(onSelected, onHovered)
                 if onSelected then
                     StopEntityFire(adminMenu.selectedPlayer.ped) 
                     adminMenu.selectedPlayer.inFire = false
+                end
+            end)
+        end
+
+        if IsPedRagdoll(adminMenu.selectedPlayer.ped) then
+            Items:AddButton("~#f16625~Le joueur est par terre...~s~", '', { HoverColor = "#f16625" }, function(onSelected, onHovered)
+                if onSelected then
+                end
+            end)
+        else
+            Items:AddButton("Faire tomber le joueur", '', { HoverColor = "#f16625" }, function(onSelected, onHovered)
+                if onSelected then
+                    SetPedToRagdoll(adminMenu.selectedPlayer.ped, 5000, 5000, 0, false, false, false)
                 end
             end)
         end
@@ -288,22 +397,17 @@ menu_admin_vehicle:SetItems(function(Items)
         end
     end)
 
-    Items:AddButton("Supprimer un véhicule", "", { HoverColor = "#f16625" }, function(onSelected, onHovered)
-        if onSelected then
-            if not IsPedInAnyVehicle(adminMenu.currentEntity, false) then
-                zUI.AlertInput("Avertissement !", nil, "Vous êtes pas dans un véhicule.")
-                return
-            end
-
-            local vehicle = GetVehiclePedIsIn(adminMenu.currentEntity, false)
-            DeleteEntity(vehicle)
-        end
-    end)
-
     if IsPedInAnyVehicle(adminMenu.currentEntity, false) then
         local currentVehicle = GetVehiclePedIsIn(adminMenu.currentEntity, false)
 
         Items:AddLine({ "#f16625" })
+
+        Items:AddButton("Supprimer un véhicule", "", { HoverColor = "#f16625" }, function(onSelected, onHovered)
+            if onSelected then
+                local vehicle = GetVehiclePedIsIn(adminMenu.currentEntity, false)
+                DeleteEntity(vehicle)
+            end
+        end)
 
         Items:AddButton("Réparer le véhicule", "", { HoverColor = "#f16625" }, function(onSelected, onHovered)
             if onSelected then
