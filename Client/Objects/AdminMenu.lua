@@ -263,7 +263,7 @@ function AdminMenu:SpawnVehicle(modelName, coords, heading)
             RequestModel(modelHash)
             repeat Wait(500) until HasModelLoaded(modelHash)
 
-            CreateVehicle(modelHash, coords.x, coords.y, coords.z, heading, true, false)
+            return CreateVehicle(modelHash, coords.x, coords.y, coords.z, heading, true, false)
         else
             zUI.AlertInput("Avertissement !", nil, "Le véhicule est invalide !")
         end

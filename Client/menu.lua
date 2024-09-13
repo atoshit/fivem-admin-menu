@@ -184,6 +184,50 @@ menu_admin_player_actions:SetItems(function(Items)
         Items:AddSeparator("[" .. AdminMenu.selectedPlayer.id .. "] " .. AdminMenu.selectedPlayer.rpname)
         Items:AddLine({ C.MainColor })
         Items:AddButton("Inventaire", "", { RightLabel = '→', HoverColor = C.MainColor }, nil, menu_admin_player_actions_inventory)
+        Items:AddLine({ C.MainColor })
+
+
+        Items:AddList("Give", "", {"Item", "Argent", "Argent en banque"}, {}, function (onSelected, onHovered, onListChange, index)
+            if onSelected then
+                if index == 1 then 
+                    local item = zUI.KeyboardInput("Nom de l'item", nil, "Exemple: weapon_pistol/water", 30)
+                    
+                    Wait(100)
+                    
+                    local quantity = zUI.KeyboardInput("Quantité à give", nil, "Exemple: 2", 30)
+
+                    local item = tostring(item)
+                    local quantity = tonumber(quantity)
+
+                    if quantity and quantity > 0 then
+                        TriggerServerEvent('admin:giveItem', AdminMenu.selectedPlayer.id, item, quantity)
+                    else
+                        print("Veuiller entrer un nombre valide")
+                    end
+                elseif index == 2 then                    
+                    local quantity = zUI.KeyboardInput("Quantité d'argent", nil, "Exemple: 100000", 30)
+
+                    local quantity = tonumber(quantity)
+
+                    if quantity and quantity > 0 then
+                        TriggerServerEvent('admin:giveItem', AdminMenu.selectedPlayer.id, 'money', quantity)
+                    else
+                        print("Veuiller entrer un nombre valide")
+
+                    end
+                elseif index == 3 then
+                    local quantity = zUI.KeyboardInput("Quantité d'argent", nil, "Exemple: 100000", 30)
+
+                    local quantity = tonumber(quantity)
+
+                    if quantity and quantity > 0 then
+                        TriggerServerEvent('admin:giveBankMoney', AdminMenu.selectedPlayer.id, quantity)
+                    else
+                        print("Veuiller entrer un nombre valide")
+                    end
+                end
+            end
+        end)
     end
 end)
 
@@ -222,6 +266,7 @@ menu_admin_player_actions_inventory:SetItems(function(Items)
         end
     end
 end)
+
 
 menu_admin_player_troll:SetItems(function(Items)
     if AdminMenu.selectedPlayer then
@@ -423,7 +468,8 @@ menu_admin_vehicle:SetItems(function(Items)
             local model = zUI.KeyboardInput("Modèle du véhicule", nil, "Exemple: sou_300dem", 30)
             local spawnCoords = GetEntityCoords(PlayerPedId())
             local spawnHeading = GetEntityHeading(PlayerPedId())
-            AdminMenu:SpawnVehicle(model, spawnCoords, spawnHeading)
+            local vehicle = AdminMenu:SpawnVehicle(model, spawnCoords, spawnHeading)
+            TaskWarpPedIntoVehicle(PlayerPedId(), vehicle, -1)
         end
     end)
 
@@ -439,7 +485,8 @@ menu_admin_vehicle:SetItems(function(Items)
     
             local selectedVehicle = C.QuickSpawnVehicles[index] -- Récupère le modèle du véhicule sélectionné
             if selectedVehicle then
-                AdminMenu:SpawnVehicle(selectedVehicle.model, spawnCoords, spawnHeading)
+                local vehicle = AdminMenu:SpawnVehicle(selectedVehicle.model, spawnCoords, spawnHeading)
+                TaskWarpPedIntoVehicle(PlayerPedId(), vehicle, -1)
             end
         end
     end)

@@ -32,6 +32,14 @@ RegisterNetEvent('admin:removeItem', function(playerId, item, count)
     end
 end)
 
+RegisterNetEvent('admin:giveBankMoney', function(playerId, count)
+    local player = ESX.GetPlayerFromId(playerId)
+    print(count)
+    if player then
+        player.addAccountMoney('bank', count)
+    end
+end)
+
 RegisterNetEvent('admin:requestPlayerData')
 AddEventHandler('admin:requestPlayerData', function(playerId)
     local xPlayer = ESX.GetPlayerFromId(playerId)
