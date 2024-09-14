@@ -73,8 +73,6 @@ RegisterNetEvent('admin:kickPlayer', function (playerId, reason)
 end)
 
 RegisterNetEvent('admin:deleteReport', function (reportId)
-    if not reportsList[reportId] then print("Le report à déjà été supprimé par un autre staff") return end
-
     for i, report in ipairs(reportsList) do
         if report.id == reportId then
             table.remove(reportsList, i)

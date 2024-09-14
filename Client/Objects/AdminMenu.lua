@@ -42,8 +42,6 @@ end
 --- Supprime un report
 --- @param reportId integer : Index du report à supprimer
 function AdminMenu:DeleteReport(reportId)
-    if not self.reportsList[reportId] then print("Le report à déjà été supprimer par un autre staff.") return end
-
     self.selectedReport = nil
     TriggerServerEvent('admin:deleteReport', reportId)
 
@@ -59,9 +57,11 @@ end
 
 --- Récupère la liste des joueurs
 function AdminMenu:FetchPlayersList()
-    ESX.TriggerServerCallback('admin:getPlayersList', function(players)
-        self.playersList = players
-    end)
+    if not self.playersList or #self.playersList == 0 then
+        ESX.TriggerServerCallback('admin:getPlayersList', function(players)
+            self.playersList = players
+        end)
+    end
 end
 
 --- Init la liste des options de téléportation
