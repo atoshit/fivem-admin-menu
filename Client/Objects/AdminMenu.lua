@@ -38,6 +38,7 @@ function CreateMenuObject()
     self.MultiplierList = {}
     self.reportsList = {}
     self.selectedReport = nil
+    self.reportCount = 0
 
     return self
 end
@@ -50,6 +51,24 @@ function AdminMenu:FetchReportsList()
     ESX.TriggerServerCallback('admin:getReportsList', function(reports)
         self.reportsList = reports
     end)
+end
+
+--- Supprime un report
+--- @param reportId integer : Index du report à supprimer
+function AdminMenu:DeleteReport(reportId)
+    if not self.reportsList[reportId] then print("Le report à déjà été supprimer par un autre staff.") return end
+
+    self.selectedReport = nil
+    TriggerServerEvent('admin:deleteReport', reportId)
+
+    for i, r in ipairs(self.reportsList) do
+        if r.id == reportId then
+            table.remove(self.reportsList, i)
+            break
+        end
+    end
+    
+    self.reportCount = self.reportCount + 1
 end
 
 --- Récupère la liste des joueurs

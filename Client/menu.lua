@@ -18,7 +18,7 @@ local menu_admin_vehicle = zUI.CreateSubMenu(menu_admin, "", "Gestion des véhic
 local menu_admin_players = zUI.CreateSubMenu(menu_admin, "", "Liste des joueurs")
 
 local menu_admin_reports = zUI.CreateSubMenu(menu_admin, "", "Gestion des reports")
-local menu_admin_report = zUI.CreateSubMenu(menu_admin_reports, "", "Gestion du report")
+local menu_admin_report = zUI.CreateSubMenu(menu_admin_reports, "", "Gestion du report(s)")
 
 local menu_admin_player = zUI.CreateSubMenu(menu_admin_players, "", "Gestion du joueur")
 local menu_admin_player_troll = zUI.CreateSubMenu(menu_admin_player, "", "Troll")
@@ -66,7 +66,7 @@ menu_admin:SetItems(function(Items)
         Items:AddButton("Options Personnel", "", { RightLabel = '→', LeftBadge = "NEW_STAR", HoverColor = C.MainColor }, nil, menu_admin_self)
         Items:AddButton("Liste des joueurs", "", { RightLabel = '→', LeftBadge = "NEW_STAR", HoverColor = C.MainColor }, nil, menu_admin_players)
         Items:AddButton("Gestion des véhicules", "", { RightLabel = '→', LeftBadge = "NEW_STAR", HoverColor = C.MainColor }, nil, menu_admin_vehicle)
-        Items:AddButton("Gestion des reports (~#f16625~" .. #AdminMenu.reportsList .. "~s~)", "", { RightLabel = '→', LeftBadge = "NEW_STAR", HoverColor = C.MainColor }, function (onSelected)
+        Items:AddButton("Gestion des report(s) (~#f16625~" .. #AdminMenu.reportsList .. "~s~)", "", { RightLabel = '→', LeftBadge = "NEW_STAR", HoverColor = C.MainColor }, function (onSelected)
             if onSelected then
                 AdminMenu:FetchReportsList()
             end
@@ -587,9 +587,13 @@ end)
 
 menu_admin_reports:SetItems(function(Items)
     if #AdminMenu.reportsList < 1 then
+        Items:AddSeparator("Report(s): ~#f16625~" .. #AdminMenu.reportsList .. "~s~")
+        Items:AddSeparator("Report(s) pris: ~#f16625~" .. AdminMenu.reportCount .. "~s~")
+        Items:AddLine({ C.MainColor })
         Items:AddSeparator("Aucun report en attente.")
     else
         Items:AddSeparator("Reports: ~#f16625~" .. #AdminMenu.reportsList .. "~s~")
+        Items:AddSeparator("Report(s) pris: ~#f16625~" .. AdminMenu.reportCount .. "~s~")
         Items:AddLine({ C.MainColor })
         for playerId, report in ipairs(AdminMenu.reportsList) do
             Items:AddButton("[" .. playerId .. "] " .. report.name, 'Raison: ' .. report.reason, { HoverColor = C.MainColor, RightLabel = '→'}, function(onSelected, onHovered)
@@ -608,7 +612,7 @@ menu_admin_report:SetItems(function(Items)
         Items:AddLine({ C.MainColor })
         Items:AddButton("Supprimer le report", '', { HoverColor = C.MainColor }, function(onSelected, onHovered)
             if onSelected then
-                --AdminMenu:DeleteReport(AdminMenu.selectedReport)
+                AdminMenu:DeleteReport(AdminMenu.selectedReport.reportId)
             end
         end)
     end
