@@ -14,10 +14,10 @@ local menu_admin_player_actions = zUI.CreateSubMenu(menu_admin_player, "", "Acti
 local menu_admin_player_actions_inventory = zUI.CreateSubMenu(menu_admin_player_actions, "", "Inventaire du joueur")
 
 --- Ajouter un bouton de joueur pour les joueurs normaux.
---- @param Items table : La table des éléments du menu.
---- @param playerData table : Les données du joueur à ajouter.
---- @param badge string : Le badge à afficher sur le bouton.
---- @param subMenu table : Le sous-menu à ouvrir lors de la sélection.
+--- @param Items table La table des éléments du menu.
+--- @param playerData table Les données du joueur à ajouter.
+--- @param badge string Le badge à afficher sur le bouton.
+--- @param subMenu table Le sous-menu à ouvrir lors de la sélection.
 local function AddPlayerButton(Items, playerData, badge, subMenu)
     Items:AddButton("[" .. playerData.id .. "] " .. playerData.rpname, '', { HoverColor = C.MainColor, LeftBadge = badge }, function(onSelected, onHovered)
         if onSelected then
@@ -27,10 +27,10 @@ local function AddPlayerButton(Items, playerData, badge, subMenu)
 end
 
 --- Ajouter un bouton de joueur pour soi-même et les administrateurs avec un message d'alerte.
---- @param Items table : La table des éléments du menu.
---- @param playerData table : Les données du joueur à ajouter.
---- @param badge string : Le badge à afficher sur le bouton.
---- @param message string : Le message d'alerte à afficher lors de la sélection.
+--- @param Items table La table des éléments du menu.
+--- @param playerData table Les données du joueur à ajouter.
+--- @param badge string Le badge à afficher sur le bouton.
+--- @param message string Le message d'alerte à afficher lors de la sélection.
 local function AddAlertButton(Items, playerData, badge, message)
     Items:AddButton("[" .. playerData.id .. "] " .. playerData.rpname, '', { HoverColor = C.MainColor, LeftBadge = badge }, function(onSelected, onHovered)
         if onSelected then

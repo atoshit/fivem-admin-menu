@@ -40,7 +40,7 @@ function AdminMenu:FetchReportsList()
 end
 
 --- Supprime un report
---- @param reportId integer : Index du report à supprimer
+--- @param reportId integer Index du report à supprimer
 function AdminMenu:DeleteReport(reportId)
     self.selectedReport = nil
     TriggerServerEvent('admin:deleteReport', reportId)
@@ -266,9 +266,9 @@ function AdminMenu:ToggleNoClipMode(enable)
 end
 
 --- Faire apparaitre un véhicuke à une position
----@param modelName string : Modèle du véhicule
----@param coords vector3 : Coordonnées du véhicule
----@param heading heading : Sens de l'apparition du véhicule
+---@param modelName string Modèle du véhicule
+---@param coords vector3 Coordonnées du véhicule
+---@param heading heading Sens de l'apparition du véhicule
 function AdminMenu:SpawnVehicle(modelName, coords, heading)
     if modelName and modelName ~= "" then
         local modelHash = GetHashKey(modelName)
