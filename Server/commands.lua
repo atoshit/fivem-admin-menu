@@ -9,10 +9,21 @@ RegisterCommand("report", function(source, args)
     local playerId = source
     local reason = table.concat(args, " ") 
 
-    local report = {
-        name = GetPlayerName(playerId),
-        reason = reason 
-    }
+    if reason == "" then
+        print("Veuiller entrer une raison")
+        return
+    end
 
-    reportsList[playerId] = report
+    if reportsList[playerId] then
+        local xPLayer = ESX.GetPlayerFromId(playerId)
+        xPLayer.showNotification("Vous avez déjà un report en attente de traitement")
+    else
+        xPLayer.showNotification("Le report à bien été envoyé")
+        local report = {
+            name = GetPlayerName(playerId),
+            reason = reason 
+        }
+    
+        reportsList[playerId] = report
+    end
 end)

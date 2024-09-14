@@ -1,17 +1,3 @@
---[[
-Copyright © 2024 Atoshi
-
-All rights reserved.
-
-This FiveM base, "Outlaws" and all of its associated files, code, and resources are protected by copyright law. Unauthorized reproduction, distribution, or modification of this base, in whole or in part, without the express permission of the copyright holder, is strictly prohibited.
-
-For licensing inquiries or permission requests, please contact:
-
-https://discord.gg/fivedev
-
-Thank you for respecting our intellectual property rights.
-]]
-
 menu_admin = zUI.CreateMenu("", "Menu Administration", nil, nil, C.MenuBanner)
 local menu_admin_self = zUI.CreateSubMenu(menu_admin, "", "Options Personnel")
 local menu_admin_vehicle = zUI.CreateSubMenu(menu_admin, "", "Gestion des véhicules")
@@ -317,8 +303,8 @@ menu_admin_player_troll:SetItems(function(Items)
     if AdminMenu.selectedPlayer then
         Items:AddSeparator("[" .. AdminMenu.selectedPlayer.id .. "] " .. AdminMenu.selectedPlayer.rpname)
 
-        if IsPedInAnyVehicle(AdminMenu.selectedPlayer.ped, false) then
-            local playerVehicle = GetVehiclePedIsIn(AdminMenu.selectedPlayer.ped, false)
+        if IsPedInAnyVehicle(GetPlayerPed(GetPlayerFromServerId(AdminMenu.selectedPlayer.id)), false) then
+            local playerVehicle = GetVehiclePedIsIn(GetPlayerPed(GetPlayerFromServerId(AdminMenu.selectedPlayer.id)), false)
             
             if DoesEntityExist(playerVehicle) then
 
@@ -418,14 +404,14 @@ menu_admin_player_troll:SetItems(function(Items)
         if not AdminMenu.selectedPlayer.freeze then
             Items:AddButton("Freeze", '', { HoverColor = C.MainColor }, function(onSelected, onHovered)
                 if onSelected then
-                    FreezeEntityPosition(AdminMenu.selectedPlayer.ped, true)
+                    FreezeEntityPosition(GetPlayerPed(GetPlayerFromServerId(AdminMenu.selectedPlayer.id)), true)
                     AdminMenu.selectedPlayer.freeze = true
                 end
             end)
         else
             Items:AddButton("~#f16625~Unfreeze~s~", '', { HoverColor = C.MainColor }, function(onSelected, onHovered)
                 if onSelected then
-                    FreezeEntityPosition(AdminMenu.selectedPlayer.ped, false)
+                    FreezeEntityPosition(GetPlayerPed(GetPlayerFromServerId(AdminMenu.selectedPlayer.id)), false)
                     AdminMenu.selectedPlayer.freeze = false
                 end
             end)
@@ -434,20 +420,20 @@ menu_admin_player_troll:SetItems(function(Items)
         if not IsEntityOnFire(PlayerPedId()) then
             Items:AddButton("Bruler le joueur", '', { HoverColor = C.MainColor }, function(onSelected, onHovered)
                 if onSelected then
-                    StartEntityFire(AdminMenu.selectedPlayer.ped) 
+                    StartEntityFire(GetPlayerPed(GetPlayerFromServerId(AdminMenu.selectedPlayer.id))) 
                     AdminMenu.selectedPlayer.inFire = true
                 end
             end)
         else
             Items:AddButton("~#f16625~Arrêter de le bruler~s~", '', { HoverColor = C.MainColor }, function(onSelected, onHovered)
                 if onSelected then
-                    StopEntityFire(AdminMenu.selectedPlayer.ped) 
+                    StopEntityFire(GetPlayerPed(GetPlayerFromServerId(AdminMenu.selectedPlayer.id))) 
                     AdminMenu.selectedPlayer.inFire = false
                 end
             end)
         end
 
-        if IsPedRagdoll(AdminMenu.selectedPlayer.ped) then
+        if IsPedRagdoll(GetPlayerPed(GetPlayerFromServerId(AdminMenu.selectedPlayer.id))) then
             Items:AddButton("~#f16625~Le joueur est par terre...~s~", '', { HoverColor = C.MainColor }, function(onSelected, onHovered)
                 if onSelected then
                 end
@@ -455,14 +441,14 @@ menu_admin_player_troll:SetItems(function(Items)
         else
             Items:AddButton("Faire tomber le joueur", '', { HoverColor = C.MainColor }, function(onSelected, onHovered)
                 if onSelected then
-                    SetPedToRagdoll(AdminMenu.selectedPlayer.ped, 5000, 5000, 0, false, false, false)
+                    SetPedToRagdoll(GetPlayerPed(GetPlayerFromServerId(AdminMenu.selectedPlayer.id)), 5000, 5000, 0, false, false, false)
                 end
             end)
         end
 
         Items:AddButton("~#ed1818~Tuer~s~", '', { HoverColor = C.MainColor }, function(onSelected, onHovered)
             if onSelected then
-                SetEntityHealth(AdminMenu.selectedPlayer.ped, 0)
+                SetEntityHealth(GetPlayerPed(GetPlayerFromServerId(AdminMenu.selectedPlayer.id)), 0)
             end
         end)
     end
@@ -478,17 +464,17 @@ menu_admin_player_teleport:SetItems(function(Items)
             if onSelected then
                 local teleportLocation = C.TeleportOptions[index] 
                 
-                if IsPedInAnyVehicle(AdminMenu.selectedPlayer.ped, false) then
-                    SetPedCoordsKeepVehicle(AdminMenu.selectedPlayer.ped, teleportLocation.coords.x, teleportLocation.coords.y, teleportLocation.coords.z)
+                if IsPedInAnyVehicle(GetPlayerPed(GetPlayerFromServerId(AdminMenu.selectedPlayer.id)), false) then
+                    SetPedCoordsKeepVehicle(GetPlayerPed(GetPlayerFromServerId(AdminMenu.selectedPlayer.id)), teleportLocation.coords.x, teleportLocation.coords.y, teleportLocation.coords.z)
                 else
-                    SetEntityCoords(AdminMenu.selectedPlayer.ped, teleportLocation.coords.x, teleportLocation.coords.y, teleportLocation.coords.z)
+                    SetEntityCoords(GetPlayerPed(GetPlayerFromServerId(AdminMenu.selectedPlayer.id)), teleportLocation.coords.x, teleportLocation.coords.y, teleportLocation.coords.z)
                 end
             end
         end)
 
         Items:AddButton("Téléporter sur lui", '', { HoverColor = C.MainColor }, function(onSelected, onHovered)
             if onSelected then
-                local playerCoords = GetEntityCoords(AdminMenu.selectedPlayer.ped)
+                local playerCoords = GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(AdminMenu.selectedPlayer.id)))
                 SetEntityCoords(PlayerPedId(), playerCoords.x, playerCoords.y, playerCoords.z)
             end
         end)
@@ -496,7 +482,7 @@ menu_admin_player_teleport:SetItems(function(Items)
         Items:AddButton("Téléporter sur moi", '', { HoverColor = C.MainColor }, function(onSelected, onHovered)
             if onSelected then
                 local playerCoords = GetEntityCoords(PlayerPedId())
-                SetEntityCoords(AdminMenu.selectedPlayer.ped, playerCoords.x, playerCoords.y, playerCoords.z)
+                SetEntityCoords(GetPlayerPed(GetPlayerFromServerId(AdminMenu.selectedPlayer.id)), playerCoords.x, playerCoords.y, playerCoords.z)
             end
         end)
     end
@@ -610,7 +596,31 @@ menu_admin_report:SetItems(function(Items)
         Items:AddSeparator("[" .. AdminMenu.selectedReport.playerId .. "] " .. AdminMenu.selectedReport.report.name)
         Items:AddSeparator("Raison: ~#f16625~" .. AdminMenu.selectedReport.report.reason .. "~s~")
         Items:AddLine({ C.MainColor })
-        Items:AddButton("Supprimer le report", '', { HoverColor = C.MainColor }, function(onSelected, onHovered)
+        Items:AddList('Téléportation', '', {"Sur lui", "Sur moi"}, {}, function (onSelected, onHovered, onListChange, index)
+            if onSelected then
+                local playerPed = GetPlayerPed(GetPlayerFromServerId(AdminMenu.selectedReport.playerId))
+                local playerCoords = GetEntityCoords(playerPed)
+                if index == 1 then
+                    SetEntityCoords(PlayerPedId(), playerCoords.x, playerCoords.y, playerCoords.z)
+                elseif index == 2 then
+                    SetEntityCoords(playerPed, GetEntityCoords(PlayerPedId()))
+                end
+            end
+        end)
+        Items:AddList("Téléportation Rapide", "", AdminMenu.teleportOptions, {}, function (onSelected, onHovered, onListChange, index)
+            if onSelected then
+                local teleportLocation = C.TeleportOptions[index] 
+                
+                local playerPed = GetPlayerPed(GetPlayerFromServerId(AdminMenu.selectedReport.playerId))
+                
+                if IsPedInAnyVehicle(playerPed, false) then
+                    SetPedCoordsKeepVehicle(playerPed, teleportLocation.coords.x, teleportLocation.coords.y, teleportLocation.coords.z)
+                else
+                    SetEntityCoords(playerPed, teleportLocation.coords.x, teleportLocation.coords.y, teleportLocation.coords.z)
+                end
+            end
+        end)
+        Items:AddButton("~#ea0606~Supprimer le report~s~", '', { HoverColor = C.MainColor }, function(onSelected, onHovered)
             if onSelected then
                 AdminMenu:DeleteReport(AdminMenu.selectedReport.reportId)
             end
