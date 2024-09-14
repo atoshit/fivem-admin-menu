@@ -99,9 +99,9 @@ end
 function AdminMenu:ToggleFeature(feature, isChecked)
     self[feature] = isChecked
     if feature == "invincibleMode" then
-        SetEntityInvincible(self.currentEntity, isChecked)
+        SetEntityInvincible(PlayerPedId(), isChecked)
     elseif feature == "visibleMode" then
-        SetEntityVisible(self.currentEntity, isChecked)
+        SetEntityVisible(PlayerPedId(), isChecked)
     elseif feature == "infiniteStamina" then
         self:ToggleInfiniteStaminaThread(isChecked)
     elseif feature == "staffMode" and isChecked then
@@ -150,7 +150,7 @@ function AdminMenu:ChangePedModel(modelName)
             repeat Wait(500) until HasModelLoaded(modelHash)
 
             SetPlayerModel(PlayerId(), modelHash)
-            SetPedAsNoLongerNeeded(self.currentEntity)
+            SetPedAsNoLongerNeeded(PlayerPedId())
 
             self.pedModel = modelName
             self.pedMode = true
@@ -171,7 +171,6 @@ function AdminMenu:RevertToPlayerModel()
                 TriggerEvent('esx:restoreLoadout')
                 self.pedMode = false
                 self.pedModel = nil
-                self.currentEntity = PlayerPedId()
             end)
         end)
     end)
@@ -180,13 +179,13 @@ end
 --- Donne de l'armure au joueur
 ---@param amount number Quantité d'armure à ajouter
 function AdminMenu:GiveArmor(amount)
-    local currentArmor = GetPedArmour(self.currentEntity)
-    SetPedArmour(self.currentEntity, math.min(currentArmor + amount, 100))
+    local currentArmor = GetPedArmour(PlayerPedId())
+    SetPedArmour(PlayerPedId(), math.min(currentArmor + amount, 100))
 end
 
 --- Soigne le joueur
 function AdminMenu:Heal()
-    SetEntityHealth(self.currentEntity, GetEntityMaxHealth(self.currentEntity))
+    SetEntityHealth(PlayerPedId(), GetEntityMaxHealth(PlayerPedId()))
 end
 
 --- Calcule la direction de la caméra

@@ -44,7 +44,8 @@ client_scripts({
     "Client/Libs/zUI/items/*.lua",
     
     "Client/Objects/*.lua",
-    "Client/*.lua"
+    "Client/*.lua",
+    "Client/Menu/*.lua"
 });
 
 dependencies ({
