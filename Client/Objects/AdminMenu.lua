@@ -25,6 +25,7 @@ function CreateMenuObject()
     self.reportsList = {}
     self.selectedReport = nil
     self.reportCount = 0
+    self.teleportCache = {}
 
     return self
 end

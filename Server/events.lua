@@ -80,3 +80,13 @@ RegisterNetEvent('admin:deleteReport', function (reportId)
         end
     end
 end)
+
+RegisterNetEvent('admin:sendAdminNotification', function()
+    local players = GetPlayers()
+    for _, playerId in ipairs(players) do
+        local xPlayer = ESX.GetPlayerFromId(playerId)
+        if xPlayer.getGroup() ~= 'user' then
+            xPlayer.showNotification("Un nouveau report est disponible")
+        end
+    end
+end)

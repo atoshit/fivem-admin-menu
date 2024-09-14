@@ -604,6 +604,7 @@ menu_admin_report:SetItems(function(Items)
                     SetEntityCoords(PlayerPedId(), playerCoords.x, playerCoords.y, playerCoords.z)
                 elseif index == 2 then
                     SetEntityCoords(playerPed, GetEntityCoords(PlayerPedId()))
+                    AdminMenu.teleportCache[AdminMenu.selectedReport.playerId] = GetEntityCoords(playerPed)
                 end
             end
         end)
@@ -620,7 +621,27 @@ menu_admin_report:SetItems(function(Items)
                 end
             end
         end)
-        Items:AddButton("~#ea0606~Supprimer le report~s~", '', { HoverColor = C.MainColor }, function(onSelected, onHovered)
+        Items:AddButton('Renvoyer à sa position', '', { HoverColor = C.MainColor }, function(onSelected, onHovered)
+            if onSelected then
+                local returnPosition = AdminMenu.teleportCache[AdminMenu.selectedReport.playerId]
+                if returnPosition then
+                    SetEntityCoords(GetPlayerPed(GetPlayerFromServerId(AdminMenu.selectedReport.playerId)), returnPosition.x, returnPosition.y, returnPosition.z)
+                    AdminMenu.teleportCache[AdminMenu.selectedReport.playerId] = nil
+                else
+                    print("Aucune position enregistrée")
+                end
+            end
+        end)
+        Items:AddButton("~#cf8a0a~Kick~s~", '', { HoverColor = C.MainColor }, function(onSelected, onHovered)
+            if onSelected then
+                local reason = zUI.KeyboardInput("Raison du kick", nil, "Exemple: Freekill", 30)
+
+                if not reason then return print("Veuiller rentré une raison") end
+
+                TriggerServerEvent('admin:kickPlayer', AdminMenu.selectedReport.playerId, reason)
+            end
+        end)
+        Items:AddButton("~#ea0606~Fermer le report~s~", '', { HoverColor = C.MainColor }, function(onSelected, onHovered)
             if onSelected then
                 AdminMenu:DeleteReport(AdminMenu.selectedReport.reportId)
             end
