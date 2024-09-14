@@ -60,3 +60,7 @@ ESX.RegisterServerCallback('admin:checkPermissions', function(source, cb)
         cb(false)
     end
 end)
+
+ESX.RegisterServerCallback('admin:getReportsList', function(source, cb)
+    cb(reportsList)
+end)

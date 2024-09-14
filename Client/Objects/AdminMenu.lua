@@ -36,12 +36,21 @@ function CreateMenuObject()
     self.colorOptions = {}
     self.quickSpawnList = {}
     self.MultiplierList = {}
+    self.reportsList = {}
+    self.selectedReport = nil
 
     return self
 end
 
 ---@class AdminMenu
 AdminMenu = CreateMenuObject()
+
+--- Récupère la liste des reports
+function AdminMenu:FetchReportsList()
+    ESX.TriggerServerCallback('admin:getReportsList', function(reports)
+        self.reportsList = reports
+    end)
+end
 
 --- Récupère la liste des joueurs
 function AdminMenu:FetchPlayersList()

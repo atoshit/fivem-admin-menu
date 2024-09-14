@@ -16,6 +16,10 @@ menu_admin = zUI.CreateMenu("", "Menu Administration", nil, nil, C.MenuBanner)
 local menu_admin_self = zUI.CreateSubMenu(menu_admin, "", "Options Personnel")
 local menu_admin_vehicle = zUI.CreateSubMenu(menu_admin, "", "Gestion des véhicules")
 local menu_admin_players = zUI.CreateSubMenu(menu_admin, "", "Liste des joueurs")
+
+local menu_admin_reports = zUI.CreateSubMenu(menu_admin, "", "Gestion des reports")
+local menu_admin_report = zUI.CreateSubMenu(menu_admin_reports, "", "Gestion du report")
+
 local menu_admin_player = zUI.CreateSubMenu(menu_admin_players, "", "Gestion du joueur")
 local menu_admin_player_troll = zUI.CreateSubMenu(menu_admin_player, "", "Troll")
 local menu_admin_player_teleport = zUI.CreateSubMenu(menu_admin_player, "", "Téléportation")
@@ -51,7 +55,10 @@ end
 
 menu_admin:SetItems(function(Items)
     Items:AddCheckbox("Mode Modération", "", AdminMenu.staffMode, { LeftBadge = "NEW_STAR", HoverColor = C.MainColor }, function(onSelected, onHovered, isChecked)
-        if onSelected then AdminMenu:ToggleFeature("staffMode", isChecked) end
+        if onSelected then 
+            AdminMenu:ToggleFeature("staffMode", isChecked) 
+            AdminMenu:FetchReportsList() 
+        end
     end)
 
     if AdminMenu.staffMode then
@@ -59,6 +66,11 @@ menu_admin:SetItems(function(Items)
         Items:AddButton("Options Personnel", "", { RightLabel = '→', LeftBadge = "NEW_STAR", HoverColor = C.MainColor }, nil, menu_admin_self)
         Items:AddButton("Liste des joueurs", "", { RightLabel = '→', LeftBadge = "NEW_STAR", HoverColor = C.MainColor }, nil, menu_admin_players)
         Items:AddButton("Gestion des véhicules", "", { RightLabel = '→', LeftBadge = "NEW_STAR", HoverColor = C.MainColor }, nil, menu_admin_vehicle)
+        Items:AddButton("Gestion des reports (~#f16625~" .. #AdminMenu.reportsList .. "~s~)", "", { RightLabel = '→', LeftBadge = "NEW_STAR", HoverColor = C.MainColor }, function (onSelected)
+            if onSelected then
+                AdminMenu:FetchReportsList()
+            end
+        end, menu_admin_reports)
     end
 end)
 
@@ -228,6 +240,40 @@ menu_admin_player_actions:SetItems(function(Items)
                 end
             end
         end)
+        Items:AddButton("Setjob", "", { HoverColor = C.MainColor }, function(onSelected, onHovered)
+            if onSelected then
+                local job = zUI.KeyboardInput("Nom du job", nil, "Exemple: police", 30)
+                Wait(100)
+                local grade = zUI.KeyboardInput("Grade", nil, "Exemple: 0", 30)
+
+                TriggerServerEvent('admin:setJob', AdminMenu.selectedPlayer.id, job, tonumber(grade))
+            end
+        end)
+        if C.Job2 then
+            Items:AddButton("Setjob2", "", { HoverColor = C.MainColor }, function(onSelected, onHovered)
+                if onSelected then
+                    local job2 = zUI.KeyboardInput("Nom du gang", nil, "Exemple: ballas", 30)
+                    Wait(100)
+                    local grade = zUI.KeyboardInput("Grade", nil, "Exemple: 0", 30)
+    
+                    TriggerServerEvent('admin:setJob2', AdminMenu.selectedPlayer.id, job2, tonumber(grade))
+                end
+            end)
+        end
+        Items:AddButton("~#df0707~Kick~s~", "", { HoverColor = C.MainColor }, function(onSelected, onHovered)
+            if onSelected then
+                local reason = zUI.KeyboardInput("Raison du kick", nil, "Exemple: Freekill", 30)
+
+                if not reason then return print("Veuiller rentré une raison") end
+
+                TriggerServerEvent('admin:kickPlayer', AdminMenu.selectedPlayer.id, reason)
+            end
+        end)
+        Items:AddButton("~#df0707~Ban~s~", "", { HoverColor = C.MainColor }, function(onSelected, onHovered)
+            if onSelected then
+
+            end
+        end)
     end
 end)
 
@@ -266,7 +312,6 @@ menu_admin_player_actions_inventory:SetItems(function(Items)
         end
     end
 end)
-
 
 menu_admin_player_troll:SetItems(function(Items)
     if AdminMenu.selectedPlayer then
@@ -535,6 +580,35 @@ menu_admin_vehicle:SetItems(function(Items)
                 local multiplierValue = selectedMultiplier.value
 
                 ModifyVehicleTopSpeed(currentVehicle, multiplierValue)
+            end
+        end)
+    end
+end)
+
+menu_admin_reports:SetItems(function(Items)
+    if #AdminMenu.reportsList < 1 then
+        Items:AddSeparator("Aucun report en attente.")
+    else
+        Items:AddSeparator("Reports: ~#f16625~" .. #AdminMenu.reportsList .. "~s~")
+        Items:AddLine({ C.MainColor })
+        for playerId, report in ipairs(AdminMenu.reportsList) do
+            Items:AddButton("[" .. playerId .. "] " .. report.name, 'Raison: ' .. report.reason, { HoverColor = C.MainColor, RightLabel = '→'}, function(onSelected, onHovered)
+                if onSelected then
+                    AdminMenu.selectedReport = {report = report, playerId = playerId}
+                end
+            end, menu_admin_report)
+        end
+    end
+end)
+
+menu_admin_report:SetItems(function(Items)
+    if AdminMenu.selectedReport then
+        Items:AddSeparator("[" .. AdminMenu.selectedReport.playerId .. "] " .. AdminMenu.selectedReport.report.name)
+        Items:AddSeparator("Raison: ~#f16625~" .. AdminMenu.selectedReport.report.reason .. "~s~")
+        Items:AddLine({ C.MainColor })
+        Items:AddButton("Supprimer le report", '', { HoverColor = C.MainColor }, function(onSelected, onHovered)
+            if onSelected then
+                --AdminMenu:DeleteReport(AdminMenu.selectedReport)
             end
         end)
     end

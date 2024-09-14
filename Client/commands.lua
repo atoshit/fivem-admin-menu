@@ -30,6 +30,7 @@ RegisterKeyMapping(C.NoclipCommand, "Activer/Desactiver le NoClip", "keyboard", 
 RegisterCommand('admin:menu', function()
     ESX.TriggerServerCallback('admin:checkPermissions', function(isStaff)
         if isStaff then
+            AdminMenu:FetchReportsList()
             menu_admin:SetVisible(not menu_admin:IsVisible())
         end  
     end)

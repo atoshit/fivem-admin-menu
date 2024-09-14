@@ -40,8 +40,7 @@ RegisterNetEvent('admin:giveBankMoney', function(playerId, count)
     end
 end)
 
-RegisterNetEvent('admin:requestPlayerData')
-AddEventHandler('admin:requestPlayerData', function(playerId)
+RegisterNetEvent('admin:requestPlayerData', function(playerId)
     local xPlayer = ESX.GetPlayerFromId(playerId)
     if xPlayer then
         local playerData = {
@@ -61,4 +60,32 @@ AddEventHandler('admin:requestPlayerData', function(playerId)
 
         TriggerClientEvent('admin:updatePlayerData', source, playerData)
     end
+end)
+
+RegisterNetEvent('admin:setJob', function(playerId, job, grade)
+    local player = ESX.GetPlayerFromId(playerId)    
+    if player then
+        if ESX.DoesJobExist(job) and ESX.DoesGradeExist(job, grade) then
+            player.setJob(job, grade)
+            TriggerEvent('admin:requestPlayerData', playerId)
+        else 
+            print("Job ou grade invalide")
+        end
+    end
+end)
+
+RegisterNetEvent('admin:setJob2', function(playerId, job2, grade)
+    local player = ESX.GetPlayerFromId(playerId)
+    if player then
+        if ESX.DoesJob2Exist(job2) then
+            player.setJob2(job2, grade)
+            TriggerEvent('admin:requestPlayerData', playerId)
+        else 
+            print("Groupe invalide")
+        end
+    end
+end)
+
+RegisterNetEvent('admin:kickPlayer', function (playerId, reason)
+    DropPlayer(playerId, "Vous venez d'être kick pour: " .. reason)
 end)
