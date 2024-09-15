@@ -91,7 +91,7 @@ menu_admin_player_infos:SetItems(function(Items)
         Items:AddSeparator("Grade: ~#1862ed~" .. AdminMenu.selectedPlayer.job.grade_label .. "~s~")
         Items:AddSeparator("Salaire Automatique: ~#1862ed~" .. AdminMenu.selectedPlayer.job.grade_salary .. "~s~$")
         Items:AddSeparator("Groupe: ~#eda618~" .. AdminMenu.selectedPlayer.group .. "~s~")
-        Items:AddSeparator("Discord ID: ~#eda618~" .. AdminMenu.selectedPlayer.discord_id .. "~s~")
+        Items:AddSeparator("Discord ID: ~#eda618~" .. AdminMenu.selectedPlayer.discord_id:gsub("^discord:", "") .. "~s~")
     end
 end)
 

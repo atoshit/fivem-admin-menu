@@ -90,3 +90,11 @@ RegisterNetEvent('admin:sendAdminNotification', function()
         end
     end
 end)
+
+RegisterNetEvent('admin:changeWeather', function(weather)
+    TriggerClientEvent('admin:applyWeather', -1, weather)
+end)
+
+RegisterNetEvent('admin:changeTime', function(time)
+    TriggerClientEvent('admin:applyTime', -1, time)
+end)

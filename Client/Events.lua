@@ -3,3 +3,13 @@ RegisterNetEvent('admin:updatePlayerData', function(playerData)
         AdminMenu.selectedPlayer = playerData
     end
 end)
+
+RegisterNetEvent('admin:applyWeather', function(weather)
+    SetWeatherTypeNowPersist(weather)
+    SetWeatherTypeNow(weather)
+    SetOverrideWeather(weather)
+end)
+
+RegisterNetEvent('admin:applyTime', function(time)
+    NetworkOverrideClockTime(time, 0, 0)
+end)

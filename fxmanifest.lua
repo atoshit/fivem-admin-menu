@@ -2,8 +2,8 @@ fx_version("cerulean");
 game("gta5");
 lua54("yes");
 
-author("Atoshi");
-description("Administration menu using zSquad zUI libs");
+author("zSquad");
+description("zSquad Administration Menu");
 
 ui_page("Client/Libs/zUI/web/build/index.html");
 

@@ -26,6 +26,8 @@ function CreateMenuObject()
     self.selectedReport = nil
     self.reportCount = 0
     self.teleportCache = {}
+    self.weatherOptions = {}
+    self.timeOptions = {}
 
     return self
 end
@@ -56,12 +58,19 @@ function AdminMenu:DeleteReport(reportId)
     self.reportCount = self.reportCount + 1
 end
 
---- Récupère la liste des joueurs
+--- Init la liste des joueurs
 function AdminMenu:FetchPlayersList()
     if not self.playersList or #self.playersList == 0 then
         ESX.TriggerServerCallback('admin:getPlayersList', function(players)
             self.playersList = players
         end)
+    end
+end
+
+--- RInit les options du temps
+function AdminMenu:initTimeOptions()
+    for _, time in ipairs(C.TimeOptions) do
+        table.insert(self.timeOptions, time.name)
     end
 end
 
@@ -76,6 +85,13 @@ end
 function AdminMenu:initColorOptions()
     for _, color in ipairs(C.ColorOptions) do
         table.insert(self.colorOptions, color.name)
+    end
+end
+
+--- Init les options de la météo
+function AdminMenu:initWeatherOptions()
+    for _, weather in ipairs(C.WeatherList) do
+        table.insert(self.weatherOptions, weather.name)
     end
 end
 
@@ -110,6 +126,8 @@ function AdminMenu:ToggleFeature(feature, isChecked)
         self:initColorOptions()
         self:initQuickSpawnList()
         self:initMultiplierList()
+        self:initWeatherOptions()
+        self:initTimeOptions()
     elseif feature == "noclipActive" then
         self:ToggleNoClipMode(isChecked)
     elseif feature == "fastSwim" then

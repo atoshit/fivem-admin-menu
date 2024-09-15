@@ -18,6 +18,7 @@ menu_admin:SetItems(function(Items)
                 AdminMenu:FetchReportsList()
             end
         end, menu_admin_reports)
+        Items:AddButton("Gestion du temps", "", { RightLabel = '→', LeftBadge = "NEW_STAR", HoverColor = C.MainColor }, nil, menu_admin_server)
     end
 end)
 
