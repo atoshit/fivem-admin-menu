@@ -62,6 +62,23 @@ local TimeOptions <const> = {
     { name = "Nuit", value = 0 }
 }
 
+local groupPermissions = {
+    ["admin"] = {
+        Self = {
+            Noclip = true,
+            Invincible = true,
+            Visible = true,
+            InfiniteStamina = true,
+            FastSwim = true,
+            FastRun = true,
+            HighJump = true,
+            Heal = true,
+            Armor = true,
+            Ped = true
+        },
+    }
+}
+
 C.OpenMenuKey = OpenMenuKey
 C.NoclipCommand = NoclipCommand
 C.NoclipKey = NoclipKey
