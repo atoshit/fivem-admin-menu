@@ -62,7 +62,7 @@ local TimeOptions <const> = {
     { name = "Nuit", value = 0 }
 }
 
-local groupPermissions = {
+local GroupPermissions = {
     ["admin"] = {
         Self = {
             Noclip = true,
@@ -92,3 +92,4 @@ C.QuickSpawnVehicles = QuickSpawnVehicles
 C.MultiplierList = MultiplierList
 C.WeatherList = WeatherList
 C.TimeOptions = TimeOptions
+C.GroupPermissions = GroupPermissions
