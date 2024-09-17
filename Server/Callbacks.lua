@@ -1,5 +1,3 @@
-playersPedList = {}
-
 ESX.RegisterServerCallback('admin:getPlayersList', function(source, cb)
     local playerList = {}
     playersPedList = {}
@@ -25,15 +23,6 @@ ESX.RegisterServerCallback('admin:getPlayersList', function(source, cb)
         }
 
     end
-
-    SetTimeout(1000, function()
-        for i, player in ipairs(playerList) do
-            if playersPedList[player.id] then
-                playerList[i].ped = playersPedList[player.id]
-            end
-        end
-        cb(playerList)
-    end)
 end)
 
 ESX.RegisterServerCallback('admin:checkPermissions', function(source, cb)
