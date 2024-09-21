@@ -36,7 +36,6 @@ RegisterNetEvent('admin:requestPlayerData', function(playerId)
             coords = xPlayer.getCoords(true),
             inventory = xPlayer.getInventory(),
             job = xPlayer.getJob(),
-            ped = playersPedList[playerId] or nil,
             freeze = false
         }
 
