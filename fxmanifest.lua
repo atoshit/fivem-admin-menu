@@ -1,27 +1,27 @@
-fx_version("cerulean");
-game("gta5");
-lua54("yes");
+fx_version "cerulean"
+game "gta5"
+lua54 "yes"
 
-author("zSquad");
-description("zSquad Administration Menu");
+author "zSquad"
+description "zSquad Administration Menu"
 
-ui_page("Client/Libs/zUI/web/build/index.html");
+ui_page "Client/Libs/zUI/web/build/index.html"
 
-files({
+files {
     "Client/Libs/zUI/web/build/index.html",
     "Client/Libs/zUI/web/build/**/*"
-});
+}
 
-shared_scripts({
+shared_scripts {
     "@es_extended/imports.lua", 
     "Shared/*.lua"
-});
 
-server_scripts({
+
+server_scripts {
     "Server/*.lua"
-});
+}
 
-client_scripts({
+client_scripts {
     "Client/Libs/zUI/config.lua",
     "Client/Libs/zUI/functions/*.lua",
     "Client/Libs/zUI/menu.lua",
@@ -32,8 +32,8 @@ client_scripts({
     "Client/Objects/*.lua",
     "Client/*.lua",
     "Client/Menu/*.lua"
-});
+}
 
-dependencies ({
+dependencies {
     'es_extended'
-});
+}
