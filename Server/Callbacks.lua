@@ -21,8 +21,8 @@ ESX.RegisterServerCallback('admin:getPlayersList', function(source, cb)
             job = xPlayer.getJob(),
             freeze = false
         }
-
     end
+    cb(playerList)
 end)
 
 ESX.RegisterServerCallback('admin:checkPermissions', function(source, cb)
